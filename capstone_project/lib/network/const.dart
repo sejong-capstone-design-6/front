@@ -1,0 +1,1 @@
+const curServerUrl= "http://13.209.97.121:4000";
