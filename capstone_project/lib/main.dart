@@ -1,5 +1,4 @@
 
-
 import 'package:capstone_project/screen/SplashPage.dart';
 import 'package:capstone_project/model/date.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
           bodyMedium: TextStyle(color: Colors.white),
         )
       ),
-      home: const SplashScreen(),
+      home: SplashScreen(),
     );
   }
 }
