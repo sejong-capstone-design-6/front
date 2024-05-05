@@ -1,10 +1,15 @@
 
+import 'package:capstone_project/model/bringScenarioDto.dart';
+import 'package:capstone_project/network/my_scenario_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class EmotionCard extends StatefulWidget {
-  int number;
-  EmotionCard(this.number);
+  int scenarioID;
+  bool? isSuccess;
+  String scenario;
+  String emotion;
+  EmotionCard(this.scenarioID,this.isSuccess,this.scenario, this.emotion);
 
   @override
   State<EmotionCard> createState() => _EmotionCardState();
@@ -14,20 +19,11 @@ class _EmotionCardState extends State<EmotionCard> {
 
   @override
   Widget build(BuildContext context) {
+    int _scenarioID=widget.scenarioID;
+    
+    
+
     double wdth=MediaQuery.of(context).size.width;
-    int is_success1=0; //false
-    int is_success2=1; //true
-    int is_success3=2; //null
-
-    int emotionvalue1=1;
-    int emotionvalue2=2;
-    int emotionvalue3=3;
-    int emotionvalue4=4;
-    int emotionvalue5=5;
-    int emotionvalue6=6;
-    int emotionvalue7=7;
-
-
 
     return Container(
       margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
@@ -63,7 +59,7 @@ class _EmotionCardState extends State<EmotionCard> {
             left: 46,
             top: 16,
             width: wdth-94,
-            child: Text("wwwwwwww\nwwww\nwwww\nwwwwwwww",
+            child: Text(widget.scenario,
               style: TextStyle(fontSize: 14),
               overflow: TextOverflow.ellipsis,
               maxLines: 4,
@@ -75,11 +71,11 @@ class _EmotionCardState extends State<EmotionCard> {
             top: 102,
             child:Row(
               children: [
-                getSuccessicon(is_success2),
+                getSuccessicon(widget.isSuccess),
                 SizedBox(
                   width: 4,
                 ),
-                getSuccess(is_success2),
+                getSuccess(widget.isSuccess),
               ],
             )
 
@@ -92,11 +88,11 @@ class _EmotionCardState extends State<EmotionCard> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                getEmotion(emotionvalue1),
+                getEmotion(widget.emotion),
                 SizedBox(
                   width: 4,
                 ),
-                getEmotionicon(emotionvalue1),
+                getEmotionicon(widget.emotion),
               ],
             )
             )
@@ -112,11 +108,11 @@ class _EmotionCardState extends State<EmotionCard> {
   }
 
 
-  Widget getSuccessicon(int value){
-    if (value==1) {
+  Widget getSuccessicon(bool? value){
+    if (value==true) {
       return Icon(Icons.circle,color: Color.fromARGB(255, 65, 105, 225),size: 16,);
     }
-    else if(value==0){
+    else if(value==false){
       return Icon(Icons.circle,color: Color.fromARGB(255, 172, 0, 0),size: 16,);
     }
     else{
@@ -126,11 +122,11 @@ class _EmotionCardState extends State<EmotionCard> {
 
 
   
-  Widget getSuccess(int value){
-    if (value==0) {
+  Widget getSuccess(bool? value){
+    if (value == false) {
       return Text("실패",style: TextStyle(fontSize: 12,color: Color.fromARGB(255, 172, 0, 0), fontWeight: FontWeight.bold),);
     }
-    else if(value==1){
+    else if(value==true){
       return Text("성공",style: TextStyle(fontSize: 12,color: Color.fromARGB(255, 65, 105, 225),fontWeight: FontWeight.bold),);
     }
     else{
@@ -139,11 +135,11 @@ class _EmotionCardState extends State<EmotionCard> {
   }
 
 
-  Widget getEmotionicon(int value){
-    if (value==1) {
+  Widget getEmotionicon(String value){
+    if (value==true) {
       return Icon(Icons.circle,color: Color.fromARGB(255, 65, 105, 225),size: 16,);
     }
-    else if(value==0){
+    else if(value==false){
       return Icon(Icons.circle,color: Color.fromARGB(255, 172, 0, 0),size: 16,);
     }
     else{
@@ -152,12 +148,12 @@ class _EmotionCardState extends State<EmotionCard> {
   }
 
 
-  Widget getEmotion(int value){
-    if (value==0) {
-      return Text("실패",style: TextStyle(fontSize: 12,color: Color.fromARGB(255, 172, 0, 0), fontWeight: FontWeight.bold),);
+  Widget getEmotion(String value){
+    if (value!="평범하게") {
+      return Text(value,style: TextStyle(fontSize: 12,color: Color.fromARGB(255, 172, 0, 0), fontWeight: FontWeight.bold),);
     }
-    else if(value==1){
-      return Text("성공",style: TextStyle(fontSize: 12,color: Color.fromARGB(255, 65, 105, 225),fontWeight: FontWeight.bold),);
+    else if(value=="평범하게"){
+      return Text(value,style: TextStyle(fontSize: 12,color: Color.fromARGB(255, 65, 105, 225),fontWeight: FontWeight.bold),);
     }
     else{
       return Text("");

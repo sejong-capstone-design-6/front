@@ -1,19 +1,19 @@
-/*import 'dart:convert';
+import 'dart:convert';
+import 'package:capstone_project/model/bringScenarioDto.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../model/date.dart';
 
-class DataProvider with ChangeNotifier{
-  final List<User> _Userlist = List.empty(growable: true);
+class scenairoProvider extends ChangeNotifier{
+  List<BringScenarioDto> scenario = [];
+  int currentpageno=1;
+  bool isAdd=false;
 
-  List<User> getUserlist(){
-    _fetchUsers();
-    return _Userlist;
+  Future<void> started() async{
+    await _getScenario();
   }
 
-  void _fetchUsers() async{
-    final response = await http.get(Uri.parse('https://jsonplacholder.typicode.com/User'))
-
-    final List<User> result = jsonDecode(response.body).map<User>((json)=>User.fromJson(json)).toList();
+  Future<void> _getScenario() async{
+    
   }
-}*/
+}
