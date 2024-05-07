@@ -39,6 +39,7 @@ dependencies:
   provider: ^6.1.2
   logger: ^2.2.0
   email_validator: ^2.1.17
+  flutter_sound: ^9.4.6
 
 dev_dependencies:
   flutter_test:

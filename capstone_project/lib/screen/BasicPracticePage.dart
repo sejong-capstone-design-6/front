@@ -59,7 +59,9 @@ class _BasicPracticePage extends State<BasicPracticePage> {
                   padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
                   child: Text('${widget.text}'),
                 ),
-                SizedBox(height: 8,),
+                SizedBox(
+                  height: 8,
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16),
                   child: Row(
@@ -68,7 +70,37 @@ class _BasicPracticePage extends State<BasicPracticePage> {
                       EmotionChip(widget.emotion),
                     ],
                   ),
-                )
+                ),
+                widget.proposedRevision != null
+                    ? Padding(
+                        padding:
+                            const EdgeInsets.only(left: 16, right: 16, top: 16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 48,
+                            ),
+                            Text(
+                              '아래의 교정법대로 다시 해볼거예요.',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white),
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Text(
+                              '${widget.proposedRevision}',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      )
+                    : SizedBox()
               ],
             ),
           )),

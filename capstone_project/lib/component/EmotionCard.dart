@@ -1,8 +1,6 @@
 import 'package:capstone_project/component/EmotionChip.dart';
 import 'package:capstone_project/screen/BasicPracticePage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-
 class EmotionCard extends StatefulWidget {
   int scenarioID;
   bool? isSuccess;
@@ -47,6 +45,7 @@ class _EmotionCardState extends State<EmotionCard> {
                                 title: widget.title,
                                 text: widget.scenario,
                                 emotion: widget.emotion,
+                                proposedRevision: '“아", “어", “음", “씁" 등 아무런 의미를 가지고 있지 않는 말, 즉, 췌언을 많이 쓰고 계세요. 췌언을 많이 사용하는 것은 스피치에 좋지 않으니, 췌언을 줄이면서 다시 해볼까요?',
                               )));
                 },
               )),
