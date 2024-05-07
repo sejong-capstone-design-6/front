@@ -1,4 +1,4 @@
-import 'package:capstone_project/Card/EmotionCard.dart';
+import 'package:capstone_project/component/EmotionCard.dart';
 import 'package:capstone_project/model/createScenarioDto.dart';
 import 'package:capstone_project/network/scenatio_update_service.dart';
 import 'package:capstone_project/screen/Login.dart';
