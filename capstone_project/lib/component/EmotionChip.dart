@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class EmotionChip extends StatelessWidget {
-  String emotion;
+  final String emotion;
 
   EmotionChip(this.emotion);
 

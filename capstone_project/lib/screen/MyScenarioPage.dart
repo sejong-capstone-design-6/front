@@ -7,7 +7,7 @@ import 'package:capstone_project/network/my_scenario_service.dart';
 import 'package:flutter/material.dart';
 
 class MyScenarioPage extends StatefulWidget {
-  int scenarioId;
+  final int scenarioId;
   MyScenarioPage({super.key, required this.scenarioId});
 
   @override

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BasicAppBar extends StatelessWidget {
-  String title;
+  final String title;
   BasicAppBar(this.title);
 
   @override

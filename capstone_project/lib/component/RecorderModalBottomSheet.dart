@@ -8,8 +8,8 @@ import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:flutter_svg/svg.dart';
 
 class RecorderModalBottomSheet extends StatefulWidget {
-  String title;
-  String sentenceEmotion;
+  final String title;
+  final String sentenceEmotion;
 
   RecorderModalBottomSheet(this.title, this.sentenceEmotion);
   @override

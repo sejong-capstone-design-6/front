@@ -4,11 +4,11 @@ import 'package:capstone_project/component/RecorderModalBottomSheet.dart';
 import 'package:flutter/material.dart';
 
 class BasicPracticePage extends StatefulWidget {
-  int id;
-  String title;
-  String text;
-  String emotion;
-  String? proposedRevision;
+  final int id;
+  final String title;
+  final String text;
+  final String emotion;
+  final String? proposedRevision;
 
   BasicPracticePage(
       {super.key,

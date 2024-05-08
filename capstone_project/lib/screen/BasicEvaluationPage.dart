@@ -5,10 +5,10 @@ import 'package:capstone_project/network/my_scenario_service.dart';
 import 'package:flutter/material.dart';
 
 class BasicEvaluationPage extends StatefulWidget {
-  String title;
-  String sentenceEmotion;
-  int sentenceId;
-  int transcriptId;
+  final String title;
+  final String sentenceEmotion;
+  final int sentenceId;
+  final int transcriptId;
 
   BasicEvaluationPage(
       this.title, this.sentenceEmotion, this.sentenceId, this.transcriptId);

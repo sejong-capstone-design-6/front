@@ -2,11 +2,11 @@ import 'package:capstone_project/component/EmotionChip.dart';
 import 'package:capstone_project/screen/BasicPracticePage.dart';
 import 'package:flutter/material.dart';
 class EmotionCard extends StatefulWidget {
-  int scenarioID;
-  bool? isSuccess;
-  String scenario;
-  String emotion;
-  String title;
+  final int scenarioID;
+  final bool? isSuccess;
+  final String scenario;
+  final String emotion;
+  final String title;
   EmotionCard(
       this.scenarioID, this.isSuccess, this.scenario, this.emotion, this.title);
 
