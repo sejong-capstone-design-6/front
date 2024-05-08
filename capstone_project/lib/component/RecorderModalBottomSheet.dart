@@ -69,6 +69,12 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
     }
   }
 
+  void _checkEvaluationComplete() {
+    while(true) {
+      
+    }
+  }
+
   void _pauseRecording() async {
     await _audioRecorder!.pauseRecorder();
     setState(() {
