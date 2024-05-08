@@ -1,11 +1,17 @@
 import 'dart:async';
 
+import 'package:capstone_project/component/CompleteModal.dart';
+import 'package:capstone_project/component/WaitingModal.dart';
+import 'package:capstone_project/screen/BasicEvaluationPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:logger/logger.dart';
 
 class RecorderModalBottomSheet extends StatefulWidget {
+  String title;
+  String sentenceEmotion;
+
+  RecorderModalBottomSheet(this.title, this.sentenceEmotion);
   @override
   State<StatefulWidget> createState() => _RecorderModalBottomSheet();
 }
@@ -13,6 +19,7 @@ class RecorderModalBottomSheet extends StatefulWidget {
 class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
   FlutterSoundRecorder? _audioRecorder;
   bool _isRecording = false;
+  bool _isWaitingForEvaluation = false;
   String? _filePath;
   Timer? _timer;
   int _recordDuration = 0; // 녹음 시간을 초로 계산
@@ -27,6 +34,7 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
   Future<void> _initializeRecorder() async {
     _filePath = '/my_recording.aac';
     await _audioRecorder!.openRecorder();
+    _startRecording();
   }
 
   void _startRecording() async {
@@ -40,6 +48,18 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
 
   void _stopRecording() async {
     await _audioRecorder!.stopRecorder();
+    _timer?.cancel();
+    setState(() {
+      _isRecording = false;
+    });
+    if (_filePath != null) {
+      print('Recording saved to: $_filePath');
+    }
+  }
+
+  void _uploadAudio() async {
+    await _audioRecorder!.pauseRecorder();
+    await _audioRecorder!.closeRecorder();
     _timer?.cancel();
     setState(() {
       _isRecording = false;
@@ -87,9 +107,34 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
   }
 
+  _showWaitingModal() {
+    Navigator.of(context).pop(); // 다이얼로그 닫기
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return WaitingModal();
+        });
+  }
+
+  _showCompleteModal() {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return CompleteModal();
+        });
+
+    Future.delayed(Duration(seconds: 1), () {
+      Navigator.of(context).pop(); // 다이얼로그 닫기
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => BasicEvaluationPage(
+              widget.title, widget.sentenceEmotion))); // 다음 페이지로 이동
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    _startRecording();
     return Container(
       height: 240,
       width: double.maxFinite,
@@ -174,7 +219,12 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
                               color: Colors.white,
                             )),
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          _uploadAudio(); //TODO 업로드 전송 로직 추가해야 함.
+                          _isWaitingForEvaluation
+                              ? _showWaitingModal()
+                              : _showCompleteModal();
+                        },
                         icon:
                             SvgPicture.asset('assets/images/UploadButton.svg'))
                   ],

@@ -33,36 +33,33 @@ Widget EmotionLabel(String value) {
     return Text(
       value,
       style: TextStyle(
-          fontSize: 12,
-          color: Color(0xffBEBEBE),
-          fontWeight: FontWeight.bold),
+          fontSize: 12, color: Color(0xffBEBEBE), fontWeight: FontWeight.w700),
     );
   } else if (value == "웃음") {
     return Text(
       value,
       style: TextStyle(
-          fontSize: 12, color: Color(0xffFFD700), fontWeight: FontWeight.bold),
+          fontSize: 12, color: Color(0xffFFD700), fontWeight: FontWeight.w700),
     );
   } else if (value == "슬픔") {
+    return Text(value,
+        style: TextStyle(
+            fontSize: 12,
+            color: Color.fromARGB(255, 65, 105, 225),
+            fontWeight: FontWeight.w700));
+  } else if (value == "놀라움") {
     return Text(
       value,
       style: TextStyle(
-          fontSize: 12, color: Color.fromARGB(255, 65, 105, 225),
-          fontWeight: FontWeight.bold
-    ));
-  }else if (value == "놀라움") {
-    return Text(
-      value,
-      style: TextStyle(
-          fontSize: 12, color: Color(0xff32CD32), fontWeight: FontWeight.bold),
+          fontSize: 12, color: Color(0xff32CD32), fontWeight: FontWeight.w700),
     );
-  }else if (value == "두려움") {
+  } else if (value == "두려움") {
     return Text(
       value,
       style: TextStyle(
-          fontSize: 12, color: Color(0xff8E9A30), fontWeight: FontWeight.bold),
+          fontSize: 12, color: Color(0xff8E9A30), fontWeight: FontWeight.w700),
     );
-  }else {
+  } else {
     return Text("");
   }
 }

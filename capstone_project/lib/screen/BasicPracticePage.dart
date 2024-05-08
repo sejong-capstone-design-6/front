@@ -1,3 +1,4 @@
+import 'package:capstone_project/component/BasicAppBar.dart';
 import 'package:capstone_project/component/EmotionChip.dart';
 import 'package:capstone_project/component/RecorderModalBottomSheet.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +37,7 @@ class _BasicPracticePage extends State<BasicPracticePage> {
       barrierColor: Colors.transparent,
       isDismissible: false,
       builder: (context) {
-        return RecorderModalBottomSheet();
+        return RecorderModalBottomSheet(widget.title, widget.emotion);
       },
     );
   }
@@ -46,22 +47,7 @@ class _BasicPracticePage extends State<BasicPracticePage> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(48.0),
-        child: AppBar(
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            color: Colors.white,
-            icon: Icon(Icons.keyboard_arrow_left),
-            iconSize: 24,
-          ),
-          title: Text(
-            widget.title,
-            style: TextStyle(fontSize: 16, color: Colors.white),
-          ),
-          centerTitle: true,
-          titleSpacing: 6.5,
-        ),
+        child: BasicAppBar(widget.title)
       ),
       body: Padding(
           padding: const EdgeInsets.only(left: 8, right: 8, top: 8),

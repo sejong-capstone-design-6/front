@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:capstone_project/component/BasicAppBar.dart';
 import 'package:capstone_project/component/EmotionCard.dart';
 import 'package:capstone_project/CreateScenarioPage.dart';
 import 'package:capstone_project/CreateSpeechPage.dart';
@@ -39,22 +40,7 @@ class _SpeechState extends State<MyScenarioPage> {
         : Scaffold(
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(48.0),
-              child: AppBar(
-                leading: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  color: Colors.white,
-                  icon: Icon(Icons.keyboard_arrow_left),
-                  iconSize: 24,
-                ),
-                title: Text(
-                  scenarioCard.title,
-                  style: TextStyle(fontSize: 16, color: Colors.white),
-                ),
-                centerTitle: true,
-                titleSpacing: 6.5,
-              ),
+              child: BasicAppBar(scenarioCard.title),
             ),
             body: ListView.builder(
                 itemCount: scenarioCard.sentences.length,
