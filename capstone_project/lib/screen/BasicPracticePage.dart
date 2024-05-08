@@ -1,4 +1,5 @@
 import 'package:capstone_project/component/EmotionChip.dart';
+import 'package:capstone_project/component/RecorderModalBottomSheet.dart';
 import 'package:flutter/material.dart';
 
 class BasicPracticePage extends StatefulWidget {
@@ -21,6 +22,25 @@ class BasicPracticePage extends StatefulWidget {
 }
 
 class _BasicPracticePage extends State<BasicPracticePage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _showModalBottomSheet();
+    });
+  }
+
+  void _showModalBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      barrierColor: Colors.transparent,
+      isDismissible: false,
+      builder: (context) {
+        return RecorderModalBottomSheet();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
