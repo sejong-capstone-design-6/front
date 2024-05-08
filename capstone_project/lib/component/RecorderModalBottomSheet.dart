@@ -129,7 +129,7 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
       Navigator.of(context).pop(); // 다이얼로그 닫기
       Navigator.of(context).push(MaterialPageRoute(
           builder: (context) => BasicEvaluationPage(
-              widget.title, widget.sentenceEmotion))); // 다음 페이지로 이동
+              widget.title, widget.sentenceEmotion, 137, 34))); // 다음 페이지로 이동
     });
   }
 

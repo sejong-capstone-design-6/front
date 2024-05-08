@@ -1,30 +1,41 @@
 import 'package:capstone_project/component/BasicAppBar.dart';
 import 'package:capstone_project/component/EmotionChip.dart';
+import 'package:capstone_project/model/bringTranscriptDto.dart';
+import 'package:capstone_project/network/my_scenario_service.dart';
 import 'package:flutter/material.dart';
 
 class BasicEvaluationPage extends StatefulWidget {
   String title;
   String sentenceEmotion;
+  int sentenceId;
+  int transcriptId;
 
-  BasicEvaluationPage(this.title, this.sentenceEmotion);
+  BasicEvaluationPage(
+      this.title, this.sentenceEmotion, this.sentenceId, this.transcriptId);
   @override
   State<StatefulWidget> createState() => _BasicEvaluationPage();
 }
 
 class _BasicEvaluationPage extends State<BasicEvaluationPage> {
   bool isLoading = true;
+  late BringTranscriptDto transcriptDto;
 
   @override
   void initState() {
     super.initState();
-    setState(() {
-      isLoading = false;
+    myScenarioService
+        .bringTranscript(widget.sentenceId, widget.transcriptId)
+        .then((value) {
+      transcriptDto = value;
+      setState(() {
+        isLoading = false;
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return isLoading ? Scaffold():Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(48.0),
         child: BasicAppBar(widget.title),
@@ -45,7 +56,7 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
                   child: Text(
-                      'Test Test Test Test Test Test Test Test Ninja Ninja Ninja Ninja Ninja'),
+                      '${transcriptDto.speechToText}'),
                 ),
                 SizedBox(
                   height: 8,
@@ -78,7 +89,7 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                         height: 8,
                       ),
                       Text(
-                        'TEST TEST TEST TEST TEST TEST TEST',
+                        '${transcriptDto.speechToText}',
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.white,
@@ -93,7 +104,7 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
                   child: Text(
-                    "AI는 웃김의 감정을 느꼈어요.",
+                    "AI는 평범의 감정을 느꼈어요.",
                     style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
@@ -104,12 +115,18 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                   height: 52,
                 ),
                 Center(
-                  child: Text(
+                  child: transcriptDto.isSuccess ? Text(
                     '성공',
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.w600,
                         color: Color(0xff4169E1)),
+                  ) : Text(
+                    '실패',
+                    style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xffAC0000)),
                   ),
                 ),
                 SizedBox(
@@ -132,7 +149,7 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                         height: 8,
                       ),
                       Text(
-                        '“ㅁ"발음이 제대로 되지 않고 있어요! 해당 자음은 입술소리이에요. 입술을 서로 붙였다가 떨어지면서 소리를 내보실까요?',
+                        '${transcriptDto.correctionProposal.proposal}',
                         style: TextStyle(fontSize: 14, color: Colors.white),
                       ),
                     ],

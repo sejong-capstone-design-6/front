@@ -1,6 +1,3 @@
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:capstone_project/component/BasicAppBar.dart';
 import 'package:capstone_project/component/EmotionCard.dart';
 import 'package:capstone_project/CreateScenarioPage.dart';
