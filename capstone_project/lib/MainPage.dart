@@ -1,9 +1,7 @@
-
-
+import 'package:capstone_project/widgets/TabBarScreen.dart';
 import 'package:flutter/material.dart';
 
-
-class MainPage extends StatefulWidget{
+class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
   @override
@@ -11,20 +9,28 @@ class MainPage extends StatefulWidget{
 }
 
 class _MainPageState extends State<MainPage> {
-
   @override
-
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        toolbarHeight: 60.0,
-          title: const Text("마음의소리",
-            style: TextStyle(
-              fontSize: 32,color: Colors.white),),
-          titleSpacing: 16.0,),
+    return MaterialApp(
+      home: Scaffold(
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(top: 15),
+              child: Text(
+                'Scenarios\nList',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 32,
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            TabBarScreen(),
+          ],
+        ),
+      ),
     );
   }
-      
-
 }
