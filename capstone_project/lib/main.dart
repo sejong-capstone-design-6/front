@@ -1,3 +1,4 @@
+import 'package:capstone_project/provider/check_evaluation_done_provider.dart';
 import 'package:capstone_project/screen/SplashPage.dart';
 import 'package:capstone_project/model/date.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,10 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => UserInfo())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserInfo()),
+        ChangeNotifierProvider(create: (_) => CheckEvaluationDoneProvider())
+      ],
       child: MyApp(),
     ),
   );
