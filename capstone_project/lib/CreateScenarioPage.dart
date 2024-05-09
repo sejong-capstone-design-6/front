@@ -1,22 +1,23 @@
-import 'package:capstone_project/Card/EmotionCard.dart';
 import 'package:capstone_project/model/createScenarioDto.dart';
+import 'package:capstone_project/model/reviseSentenceDto.dart';
+import 'package:capstone_project/network/revise_sentence_service.dart';
 import 'package:capstone_project/network/scenatio_update_service.dart';
-import 'package:capstone_project/screen/Login.dart';
 import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 
 
 
 
 
 class CreateScenarioPage extends StatefulWidget{
-  CreateScenarioPage({super.key,required this.scenarioId,required this.scenarioID_ID, required this.text, required this.emotion});
+  CreateScenarioPage({super.key,required this.scenarioId,required this.text, required this.emotion, required this.isrevise});
 
   int scenarioId;
-  int scenarioID_ID;
   String text;
   String emotion;
+
+  bool isrevise;
 
   @override
   State<StatefulWidget> createState()=> _MyCheckBoxState();
@@ -26,13 +27,35 @@ class CreateScenarioPage extends StatefulWidget{
 
 class _MyCheckBoxState extends State<CreateScenarioPage>{
   bool isnormal=false;
-  bool isaccent=false;
-  bool scenarioMode=true;
-  final _controller= TextEditingController();
+  bool ishappy=false;
+  bool isanger=false;
+  bool issad=false;
+  bool issurprise=false;
+  bool isfeared=false;
+
+
   late List<bool> isSelected;
 
   void initState(){
-    isSelected=[isnormal,isaccent];
+    if(widget.emotion=="평범"){
+      isnormal=true;
+    }
+    else if(widget.emotion=="기뻐"){
+      ishappy=true;
+    }
+    else if(widget.emotion=="분노"){
+      isanger=true;
+    }
+    else if(widget.emotion=="슬퍼"){
+      issad=true;
+    }
+    else if(widget.emotion=="놀라"){
+      issurprise=true;
+    }
+    else if(widget.emotion=="두려워"){
+      isfeared=true;
+    }
+    isSelected=[isnormal,ishappy,isanger,issad,issurprise,isfeared];
     super.initState();
   }
 
@@ -40,17 +63,17 @@ class _MyCheckBoxState extends State<CreateScenarioPage>{
   @override
   Widget build(BuildContext context) {
     int _scenarioID=widget.scenarioId;
-    int _scenarioID_ID=widget.scenarioID_ID;
     String _emotion=widget.emotion;
     double weth=MediaQuery.of(context).size.width;
     double hight=MediaQuery.of(context).size.height;
+    final _controller= TextEditingController(text: widget.text);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(48.0),
         child: AppBar(
           leading: IconButton(
             onPressed: (){
-        
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
             },
             color: Colors.white,
             icon: Icon(Icons.keyboard_arrow_left),
@@ -64,11 +87,47 @@ class _MyCheckBoxState extends State<CreateScenarioPage>{
           actions: [
             TextButton(onPressed: ()async{
               String text=_controller.text;
-              dynamic statusCode = await scenarioUpdateService.UpdateSceanrio(CreateScenarioDto(_scenarioID, text, _emotion));
-              print(statusCode);
-              print("$_scenarioID        $text                $_emotion");
-              //Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
-              
+              if (isnormal==true) {
+                _emotion="평범";
+              }
+              else if(ishappy==true){
+                _emotion="기뻐";
+              }
+              else if (isanger==true){
+                _emotion="분노";
+              }
+              else if(issad==true){
+                _emotion="슬퍼";
+              }
+              else if(issurprise==true){
+                _emotion="놀라";
+              }
+              else if(isfeared==true){
+                _emotion="무서워";
+              }
+
+              dynamic statusCode;
+              if(widget.isrevise==false)
+              {
+                statusCode = await scenarioUpdateService.UpdateScenario(CreateScenarioDto(_scenarioID, text, _emotion));
+                if(statusCode==201){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
+                }
+                else{
+                  showSnackDeny(context);
+                }
+              }
+              else{
+                dynamic response = await reviseSentenceService.ReviseSentence(ReviseSentenceDto(text));
+                dynamic s=response.body;
+                print("$s");
+                if(response.statusCode==201){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
+                }
+                else{
+                  showSnackDeny(context);
+                }
+              }
             }, 
             child: Text("완료",
               style: TextStyle(color: Colors.white,fontSize: 16.0),))
@@ -137,7 +196,7 @@ class _MyCheckBoxState extends State<CreateScenarioPage>{
                 color: Colors.white,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),//간격=16
+                    padding: EdgeInsets.symmetric(horizontal: 7),//간격=16
                     child: Row(
                       children: [
                         Text("평범",style: TextStyle(color: Colors.white),),
@@ -146,11 +205,47 @@ class _MyCheckBoxState extends State<CreateScenarioPage>{
                     )
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 7),
                     child: Row(
                       children: [
-                        Text("강조",style: TextStyle(color: Colors.red),),
+                        Text("기뻐",style: TextStyle(color: Colors.red),),
                         Icon(Icons.circle,color: Colors.red,size: 16,),
+                      ],
+                    )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 7),//간격=16
+                    child: Row(
+                      children: [
+                        Text("분노",style: TextStyle(color: Colors.white),),
+                        Icon(Icons.circle,color: Colors.white,size: 16,),
+                      ],
+                    )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 7),//간격=16
+                    child: Row(
+                      children: [
+                        Text("슬퍼",style: TextStyle(color: Colors.white),),
+                        Icon(Icons.circle,color: Colors.white,size: 16,),
+                      ],
+                    )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 7),//간격=16
+                    child: Row(
+                      children: [
+                        Text("놀라",style: TextStyle(color: Colors.white),),
+                        Icon(Icons.circle,color: Colors.white,size: 16,),
+                      ],
+                    )
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 7),//간격=16
+                    child: Row(
+                      children: [
+                        Text("두려워",style: TextStyle(color: Colors.white),),
+                        Icon(Icons.circle,color: Colors.white,size: 16,),
                       ],
                     )
                   ),  
@@ -182,14 +277,54 @@ class _MyCheckBoxState extends State<CreateScenarioPage>{
   void toggleselect(value){
     if(value==0){
       isnormal=true;
-      isaccent=false;
+      ishappy=false;
+      isanger=false;
+      issad=false;
+      issurprise=false;
+      isfeared=false;
     }
-    else{
+    else if(value==1){
       isnormal=false;
-      isaccent=true;
+      ishappy=true;
+      isanger=false;
+      issad=false;
+      issurprise=false;
+      isfeared=false;   
+    }
+    else if(value==2){
+      isnormal=false;
+      ishappy=false;
+      isanger=true;
+      issad=false;
+      issurprise=false;
+      isfeared=false;   
+    }
+    else if(value==3){
+      isnormal=false;
+      ishappy=false;
+      isanger=false;
+      issad=true;
+      issurprise=false;
+      isfeared=false;   
+    }
+    else if(value==4){
+      isnormal=false;
+      ishappy=false;
+      isanger=false;
+      issad=false;
+      issurprise=true;
+      isfeared=false;   
+    }
+    else if(value==5){
+      isnormal=false;
+      ishappy=false;
+      isanger=false;
+      issad=false;
+      issurprise=false;
+      isfeared=true;   
     }
     setState(() {
-      isSelected=[isnormal,isaccent];
+      isSelected=[isnormal,ishappy,isanger,issad,issurprise,isfeared];
     });
   }
 }

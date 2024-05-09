@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:capstone_project/Card/EmotionCard.dart';
-import 'package:capstone_project/CreateScenarioPage.dart';
 import 'package:capstone_project/CreateSpeechPage.dart';
+import 'package:capstone_project/CreateScenarioPage.dart';
 import 'package:capstone_project/model/bringScenarioDto.dart';
 import 'package:capstone_project/network/my_scenario_service.dart';
 import 'package:flutter/material.dart';
@@ -69,7 +69,7 @@ class _SpeechState extends State<MyScenarioPage>{
           itemCount: scenarioCard.sentences.length,
           
           itemBuilder: (BuildContext context, int index){
-            return EmotionCard(scenarioCard.sentences[index].id, scenarioCard.sentences[index].isSuccess,scenarioCard.sentences[index].sentence, scenarioCard.sentences[index].emotion);
+            return EmotionCard(scenarioCard.sentences[index].id, scenarioCard.sentences[index].isSuccess,scenarioCard.sentences[index].sentence, scenarioCard.sentences[index].emotion, scenarioMode);
           }
         ),
         floatingActionButton: Container(
@@ -80,10 +80,10 @@ class _SpeechState extends State<MyScenarioPage>{
               shape: CircleBorder(),
               onPressed: (){
                 if (scenarioMode==true) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateScenarioPage(scenarioId: widget.scenarioId, scenarioID_ID: scenarioCard.sentences.length+1 , text: "", emotion: "")));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateScenarioPage(scenarioId: widget.scenarioId,text: "", emotion: "",isrevise: false,)));
                 }
                 else if (scenarioMode==false){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateSpeechPage(scenarioId: widget.scenarioId, scenarioID_ID: scenarioCard.sentences.length+1 , text: "", emotion: "")));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateSpeechPage(scenarioId: widget.scenarioId,text: "" ,emotion: "",isrevise: false,)));
                 }
               },
               backgroundColor: Color.fromARGB(255, 0, 125, 167),

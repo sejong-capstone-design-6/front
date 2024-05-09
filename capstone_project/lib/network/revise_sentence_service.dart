@@ -1,19 +1,18 @@
 import 'dart:convert';
 
-
-import 'package:capstone_project/model/createScenarioDto.dart';
+import 'package:capstone_project/model/reviseSentenceDto.dart';
 import 'package:capstone_project/network/const.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
-class ScenarioUpdateService{
+class ReviseSentenceService{
   String scenarioUpdateUrl = '$curServerUrl/my-scenarios';
 
-  Future<dynamic> UpdateScenario(CreateScenarioDto dto) async{
+  Future<dynamic> ReviseSentence(ReviseSentenceDto dto) async{
     try{
-      final url= Uri.parse("$scenarioUpdateUrl/sentences");      
+      final url= Uri.parse("$scenarioUpdateUrl/sentences/revise");      
       final response = await http.post(url, body: jsonEncode(dto.toJson()),headers: {"Content-Type":"application/json"});
-      return response.statusCode; 
+      return response; 
     }
     catch (e){
       Logger().d(e);
@@ -21,4 +20,4 @@ class ScenarioUpdateService{
   }
 }
 
-ScenarioUpdateService scenarioUpdateService = ScenarioUpdateService();
+ReviseSentenceService reviseSentenceService = ReviseSentenceService();

@@ -1,23 +1,24 @@
-import 'package:capstone_project/Card/EmotionCard.dart';
 import 'package:capstone_project/model/createScenarioDto.dart';
+import 'package:capstone_project/model/reviseSentenceDto.dart';
+import 'package:capstone_project/network/revise_sentence_service.dart';
 import 'package:capstone_project/network/scenatio_update_service.dart';
-import 'package:capstone_project/screen/Login.dart';
 import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 
 
 
 
 
 class CreateSpeechPage extends StatefulWidget{
-  CreateSpeechPage({super.key,required this.scenarioId,required this.scenarioID_ID, required this.text, required this.emotion});
+  CreateSpeechPage({super.key,required this.scenarioId,required this.text ,required this.emotion, required this.isrevise});
 
   int scenarioId;
-  int scenarioID_ID;
   String text;
   String emotion;
-  
+
+  bool isrevise;
+
   @override
   State<StatefulWidget> createState()=> _MyCheckBoxState();
   
@@ -27,12 +28,15 @@ class CreateSpeechPage extends StatefulWidget{
 class _MyCheckBoxState extends State<CreateSpeechPage>{
   bool isnormal=false;
   bool isaccent=false;
-  bool scenarioMode=true;
-  final _controller= TextEditingController();
   late List<bool> isSelected;
-  
 
   void initState(){
+    if (widget.emotion=="평범") {
+      isnormal=true;
+    }
+    else if(widget.emotion=="강조"){
+      isaccent=true;
+    }
     isSelected=[isnormal,isaccent];
     super.initState();
   }
@@ -41,17 +45,17 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
   @override
   Widget build(BuildContext context) {
     int _scenarioID=widget.scenarioId;
-    int _scenarioID_ID=widget.scenarioID_ID;
     String _emotion=widget.emotion;
     double weth=MediaQuery.of(context).size.width;
     double hight=MediaQuery.of(context).size.height;
+    final _controller= TextEditingController(text: widget.text);
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(48.0),
         child: AppBar(
           leading: IconButton(
             onPressed: (){
-        
+              Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
             },
             color: Colors.white,
             icon: Icon(Icons.keyboard_arrow_left),
@@ -63,14 +67,35 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
           centerTitle: true,
           titleSpacing: 6.5,
           actions: [
-            TextButton(onPressed: (){
-              print("$_controller");
-              dynamic statusCode = scenarioUpdateService.UpdateSceanrio(CreateScenarioDto(_scenarioID, _controller.toString(), _emotion));
-              if(statusCode!=201){
-                showSnackDeny(context);
+            TextButton(onPressed: ()async{
+              String text=_controller.text;
+              if (isnormal==true) {
+                _emotion="평범";
+              }
+              else if(isaccent==true){
+                _emotion="강조";
+              }
+              dynamic statusCode;
+              if(widget.isrevise==false)
+              {
+                statusCode = await scenarioUpdateService.UpdateScenario(CreateScenarioDto(_scenarioID, text, _emotion));
+                if(statusCode==201){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
+                }
+                else{
+                  showSnackDeny(context);
+                }
               }
               else{
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
+                dynamic response = await reviseSentenceService.ReviseSentence(ReviseSentenceDto(text));
+                dynamic s=response.body;
+                print("$s");
+                if(response.statusCode==201){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
+                }
+                else{
+                  showSnackDeny(context);
+                }
               }
             }, 
             child: Text("완료",
