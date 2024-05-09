@@ -54,7 +54,7 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
         child: AppBar(
           leading: IconButton(
             onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
+              Navigator.of(context).pop();
             },
             color: Colors.white,
             icon: Icon(Icons.keyboard_arrow_left),

@@ -1,5 +1,5 @@
-import 'package:capstone_project/CreateSpeechPage.dart';
-import 'package:capstone_project/CreateScenarioPage.dart';
+import 'package:capstone_project/screen/CreateSpeechPage.dart';
+import 'package:capstone_project/screen/CreateScenarioPage.dart';
 import 'package:capstone_project/component/BasicAppBar.dart';
 import 'package:capstone_project/component/EmotionCard.dart';
 import 'package:capstone_project/model/bringScenarioDto.dart';
@@ -74,7 +74,7 @@ class _SpeechState extends State<MyScenarioPage> {
                                   scenarioId: widget.scenarioId,
                                   text: "",
                                   emotion: "",
-                                  isrevise: false,
+                                  isRevise: false,
                                 )));
                   }
                 },
