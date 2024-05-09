@@ -1,4 +1,6 @@
 import 'package:capstone_project/model/logInDto.dart';
+import 'package:capstone_project/MainPage.dart';
+import 'package:capstone_project/model/signUpDto.dart';
 import 'package:capstone_project/network/auth_service.dart';
 import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:capstone_project/screen/SignUp.dart';
@@ -43,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   margin: const EdgeInsets.fromLTRB(9.0, 0.0, 9.0, 0.0),
                   padding: const EdgeInsets.fromLTRB(16.0, 14.0, 16.0, 2.0),
+                  padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
                   child: const Text(
                     "Email",
                     style: TextStyle(fontSize: 16.0),
@@ -76,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                   height: 38.0,
                   width: double.infinity,
                   margin: const EdgeInsets.fromLTRB(9.0, 0.0, 9.0, 0.0),
-                  padding: const EdgeInsets.fromLTRB(16.0, 14.0, 16.0, 2.0),
+                  padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
                   child: const Text(
                     "Password",
                     style: TextStyle(fontSize: 16.0),
@@ -211,5 +214,7 @@ void showSnackError(BuildContext context) {
     ),
     duration: Duration(seconds: 2),
     backgroundColor: Colors.blue,
-  ));
+
+    )
+  );
 }

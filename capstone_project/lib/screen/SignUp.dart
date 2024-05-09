@@ -6,20 +6,16 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:email_validator/email_validator.dart';
 
-
-
-class SignUp extends StatefulWidget{
+class SignUp extends StatefulWidget {
   const SignUp({super.key});
 
   @override
-  State<StatefulWidget> createState()=> _MyCheckBoxState();
-  
-
+  State<StatefulWidget> createState() => _MyCheckBoxState();
 }
 
-class _MyCheckBoxState extends State<SignUp>{
-  TextEditingController Passwordinput=TextEditingController();
-  final _formKey = GlobalKey<FormState>();
+class _MyCheckBoxState extends State<SignUp> {
+  TextEditingController Emailinput = TextEditingController();
+  TextEditingController Passwordinput = TextEditingController();
   bool _isAgreed = false;
   String email = "";
   String password = "";
@@ -226,6 +222,13 @@ class _MyCheckBoxState extends State<SignUp>{
                 
                   ],
                 ),
+                keyboardType: TextInputType.text,
+                style: TextStyle(color: Colors.white),
+                onChanged: (value) => {
+                  setState(() {
+                    password = value;
+                  })
+                },
               ),
             ),
           );
@@ -287,7 +290,5 @@ void showSnackPasswordEmpty(BuildContext context){
     textAlign: TextAlign.center,),
     duration: Duration(seconds: 2),
     backgroundColor: Colors.blue,
-
-    )
-  );
+  ));
 }
