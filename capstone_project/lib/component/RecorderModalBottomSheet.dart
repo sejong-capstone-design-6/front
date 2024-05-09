@@ -3,19 +3,18 @@ import 'dart:async';
 import 'package:capstone_project/component/CompleteModal.dart';
 import 'package:capstone_project/component/WaitingModal.dart';
 import 'package:capstone_project/network/my_scenario_service.dart';
-import 'package:capstone_project/provider/check_evaluation_done_provider.dart';
 import 'package:capstone_project/screen/BasicEvaluationPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_sound/public/flutter_sound_recorder.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
 
 class RecorderModalBottomSheet extends StatefulWidget {
   final String title;
   final String sentenceEmotion;
+  final int sentenceId;
 
-  RecorderModalBottomSheet(this.title, this.sentenceEmotion);
+  RecorderModalBottomSheet(this.title, this.sentenceEmotion, this.sentenceId);
   @override
   State<StatefulWidget> createState() => _RecorderModalBottomSheet();
 }
@@ -36,22 +35,6 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
     _initializeRecorder();
   }
 
-  _showCompleteModal(int transcriptId) {
-    Navigator.of(context).pop();
-    showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          return CompleteModal();
-        });
-
-    Future.delayed(Duration(seconds: 1), () {
-      Navigator.of(context).pop(); // 다이얼로그 닫기
-      Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => BasicEvaluationPage(widget.title,
-              widget.sentenceEmotion, 137, transcriptId))); // 다음 페이지로 이동
-    });
-  }
 
   Future<int> _checkEvaluationComplete(int sentenceId) async {
     bool status = false;
@@ -136,17 +119,31 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
     });
   }
 
-  _showWaitingModal() async {
+  _waitVoiceFileEvaluation() async {
     showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) {
           return WaitingModal();
         });
+    int transcriptId = await _checkEvaluationComplete(widget.sentenceId);
 
-    await _checkEvaluationComplete(137);
-    Navigator.of(context, rootNavigator: true)
-        .pop(); // rootNavigator를 사용하여 앱의 root Navigator에 접근
+    Navigator.of(context).pop();
+
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return CompleteModal();
+        });
+
+    Future.delayed(Duration(seconds: 1), () {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => BasicEvaluationPage(widget.title,
+              widget.sentenceEmotion, widget.sentenceId, transcriptId))); // 다음 페이지로 이동
+    });
   }
 
   @override
@@ -165,9 +162,6 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    CheckEvaluationDoneProvider readCheckEvaluationDoneProvider =
-        context.read<CheckEvaluationDoneProvider>();
-
     return Container(
       height: 240,
       width: double.maxFinite,
@@ -253,10 +247,8 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
                             )),
                     IconButton(
                         onPressed: () {
-                          _uploadAudio().then((value) {
-                            Navigator.of(context).pop();
-                            _showWaitingModal();
-                          });
+                          _uploadAudio()
+                              .then((value) => _waitVoiceFileEvaluation());
                         },
                         icon:
                             SvgPicture.asset('assets/images/UploadButton.svg'))
