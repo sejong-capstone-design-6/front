@@ -1,1 +1,1 @@
-const curServerUrl= "http://13.209.97.121:4000";
+const curServerUrl= "http://13.125.172.71:4000";

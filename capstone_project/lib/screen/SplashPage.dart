@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:capstone_project/CreateScenarioPage.dart';
 import 'package:capstone_project/screen/Login.dart';
+import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -15,8 +17,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState(){
     super.initState();
-    Timer(const Duration(seconds: 2), () => Navigator.push(context, MaterialPageRoute(builder: (context)=>const LoginPage()),),
-    );
+    Timer(const Duration(seconds: 2), () => Navigator.push(context, MaterialPageRoute(builder: (context)=>CreateScenarioPage(scenarioId: 4, scenarioID_ID: 3, text: "s", emotion: "평범"))),)//CreateScenarioPage(scenarioId: 4, scenarioID_ID: 3, text: "s", emotion: "평범")
+    ;
   }
 
 

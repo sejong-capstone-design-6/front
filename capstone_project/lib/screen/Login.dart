@@ -1,4 +1,6 @@
 import 'package:capstone_project/MainPage.dart';
+import 'package:capstone_project/model/signUpDto.dart';
+import 'package:capstone_project/network/auth_service.dart';
 import 'package:capstone_project/screen/SignUp.dart';
 import 'package:flutter/material.dart';
 
@@ -104,39 +106,47 @@ class _LoginPageState extends State<LoginPage> {
                     keyboardType: TextInputType.text,
                     style: const TextStyle(color: Colors.white),
                   ),
-                ),
-                Container(
-                  height: 48.0,
-                ),
-                Container(
-                  height: 56.0,
-                  margin: const EdgeInsets.fromLTRB(17.0, 0.0, 17.0, 0.0),
-                  padding: const EdgeInsets.fromLTRB(0.0, 6.0, 0.0, 6.0),
-                  width: double.infinity,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      if (Emailinput.text.isEmpty == false &&
-                          Passwordinput.text.isEmpty == false) {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MainPage()));
-                      } else if (Emailinput.text.isEmpty == true) {
-                        showSnackEmailinput(context);
-                      } else if (Passwordinput.text.isEmpty == true) {
-                        showSnackPw(context);
-                      }
-                    },
-                    style: OutlinedButton.styleFrom(
-                        padding: const EdgeInsets.all(0),
-                        shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(10))),
-                        side: const BorderSide(
-                            color: Color.fromARGB(50, 255, 255, 255))),
-                    child: const Text(
-                      "로그인",
-                      style: TextStyle(color: Colors.white, fontSize: 17.0),
+                  ),
+            
+            
+                  Container(
+                    height: 48.0,
+                  ),
+            
+                  Container(
+                    height: 56.0,
+                    margin: const EdgeInsets.fromLTRB(17.0, 0.0, 17.0, 0.0),
+                    padding: const EdgeInsets.fromLTRB(0.0, 6.0, 0.0, 6.0),
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: ()async{
+                        dynamic statusCode = await authSercive.signUp(SignUpDto(Emailinput.text, Passwordinput.text));
+                        if(Emailinput.text.isEmpty==false&&Passwordinput.text.isEmpty==false&&statusCode==201){
+                          
+                    
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>const MainPage()));
+                    
+                        }
+                        else if(Emailinput.text.isEmpty==true){
+                          showSnackEmailinput(context);
+                        }
+                        else if(Passwordinput.text.isEmpty==true){
+                          showSnackPw(context);
+                        }
+                        else{
+                          showSnackError(context);
+                        }
+                    
+                                      },
+                          style: OutlinedButton.styleFrom(
+                            padding: const EdgeInsets.all(0),
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(10))),
+                            side: const BorderSide(color: Color.fromARGB(50, 255, 255, 255))
+                          ), 
+                      child: const Text("로그인",
+                        style: TextStyle(
+                          color: Colors.white, 
+                          fontSize: 17.0),),
                     ),
                   ),
                 ),
@@ -193,5 +203,19 @@ void showSnackPw(BuildContext context) {
     ),
     duration: Duration(seconds: 2),
     backgroundColor: Colors.blue,
-  ));
+    )
+  );
+}
+
+void showSnackError(BuildContext context){
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: 
+    Text('로그인 에러',
+    textAlign: TextAlign.center,),
+    duration: Duration(seconds: 2),
+    backgroundColor: Colors.blue,
+
+    )
+  );
 }
