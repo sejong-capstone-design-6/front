@@ -1,7 +1,7 @@
 import 'package:capstone_project/model/createScenarioDto.dart';
 import 'package:capstone_project/model/reviseSentenceDto.dart';
+import 'package:capstone_project/network/my_scenario_service.dart';
 import 'package:capstone_project/network/revise_sentence_service.dart';
-import 'package:capstone_project/network/scenatio_update_service.dart';
 import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:flutter/material.dart';
 
@@ -11,13 +11,12 @@ import 'package:flutter/material.dart';
 
 
 class CreateSpeechPage extends StatefulWidget{
-  CreateSpeechPage({super.key,required this.scenarioId,required this.text ,required this.emotion, required this.isrevise});
+  CreateSpeechPage({super.key,required this.scenarioId,required this.text ,required this.emotion, required this.isRevise});
+  final int scenarioId;
+  final String text;
+  final String emotion;
 
-  int scenarioId;
-  String text;
-  String emotion;
-
-  bool isrevise;
+  final bool isRevise;
 
   @override
   State<StatefulWidget> createState()=> _MyCheckBoxState();
@@ -76,9 +75,9 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
                 _emotion="강조";
               }
               dynamic statusCode;
-              if(widget.isrevise==false)
+              if(widget.isRevise==false)
               {
-                statusCode = await scenarioUpdateService.UpdateScenario(CreateScenarioDto(_scenarioID, text, _emotion));
+                statusCode = await myScenarioService.updateSceanrio(CreateScenarioDto(_scenarioID, text, _emotion));
                 if(statusCode==201){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
                 }
