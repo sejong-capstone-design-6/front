@@ -1,7 +1,7 @@
+import 'package:capstone_project/screen/CreateSpeechPage.dart';
+import 'package:capstone_project/screen/CreateScenarioPage.dart';
 import 'package:capstone_project/component/BasicAppBar.dart';
 import 'package:capstone_project/component/EmotionCard.dart';
-import 'package:capstone_project/CreateScenarioPage.dart';
-import 'package:capstone_project/CreateSpeechPage.dart';
 import 'package:capstone_project/model/bringScenarioDto.dart';
 import 'package:capstone_project/network/my_scenario_service.dart';
 import 'package:flutter/material.dart';
@@ -36,9 +36,8 @@ class _SpeechState extends State<MyScenarioPage> {
         ? Scaffold()
         : Scaffold(
             appBar: PreferredSize(
-              preferredSize: Size.fromHeight(48.0),
-              child: BasicAppBar(scenarioCard.title),
-            ),
+                preferredSize: Size.fromHeight(48.0),
+                child: BasicAppBar(scenarioCard.title)),
             body: ListView.builder(
                 itemCount: scenarioCard.sentences.length,
                 itemBuilder: (BuildContext context, int index) {
@@ -61,21 +60,22 @@ class _SpeechState extends State<MyScenarioPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => CreateScenarioPage(
-                                scenarioId: widget.scenarioId,
-                                scenarioID_ID:
-                                    scenarioCard.sentences.length + 1,
-                                text: "",
-                                emotion: "")));
+                                  scenarioId: widget.scenarioId,
+                                  text: "",
+                                  emotion: "",
+                                  isRevise: false,
+                                  scenarioID_ID: 1,
+                                )));
                   } else if (scenarioMode == false) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => CreateSpeechPage(
-                                scenarioId: widget.scenarioId,
-                                scenarioID_ID:
-                                    scenarioCard.sentences.length + 1,
-                                text: "",
-                                emotion: "")));
+                                  scenarioId: widget.scenarioId,
+                                  text: "",
+                                  emotion: "",
+                                  isRevise: false,
+                                )));
                   }
                 },
                 backgroundColor: Color.fromARGB(255, 0, 125, 167),

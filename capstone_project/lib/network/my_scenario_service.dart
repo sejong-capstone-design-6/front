@@ -68,7 +68,7 @@ class MyScenarioService {
     }
   }
 
-  Future<dynamic> UpdateSceanrio(CreateScenarioDto dto) async{
+  Future<dynamic> updateSceanrio(CreateScenarioDto dto) async{
     try{
       final url= Uri.parse("$myScenarioUrl/sentences");
       

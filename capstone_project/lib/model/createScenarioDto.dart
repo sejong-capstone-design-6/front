@@ -8,7 +8,7 @@ class CreateScenarioDto {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
-    data['scenarioID'] = scenarioID;
+    data['scenarioId'] = scenarioID;
     data['text'] = text;
     data['emotion'] = emotion;
 
