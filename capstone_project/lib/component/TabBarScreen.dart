@@ -1,7 +1,6 @@
 import 'package:capstone_project/screen/Scenario.dart';
 import 'package:capstone_project/services/api_service.dart';
-import 'package:capstone_project/widgets/MovieCard.dart';
-import 'package:capstone_project/widgets/ScenarioCard.dart';
+import 'package:capstone_project/component/MovieCard.dart';
 import 'package:flutter/material.dart';
 
 class TabBarScreen extends StatefulWidget {

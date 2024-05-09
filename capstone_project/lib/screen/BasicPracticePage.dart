@@ -1,15 +1,7 @@
 import 'package:capstone_project/component/BasicAppBar.dart';
-import 'package:capstone_project/component/CompleteModal.dart';
 import 'package:capstone_project/component/EmotionChip.dart';
 import 'package:capstone_project/component/RecorderModalBottomSheet.dart';
-import 'package:capstone_project/component/WaitingModal.dart';
-import 'package:capstone_project/network/my_scenario_service.dart';
-import 'package:capstone_project/provider/check_evaluation_done_provider.dart';
-import 'package:capstone_project/provider/check_evaluation_done_provider.dart';
-import 'package:capstone_project/screen/BasicEvaluationPage.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
-import 'package:provider/provider.dart';
 
 class BasicPracticePage extends StatefulWidget {
   final int id;

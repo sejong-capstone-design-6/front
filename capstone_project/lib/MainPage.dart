@@ -1,4 +1,4 @@
-import 'package:capstone_project/widgets/TabBarScreen.dart';
+import 'package:capstone_project/component/TabBarScreen.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -11,8 +11,8 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Color.fromARGB(255, 0, 0, 0),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

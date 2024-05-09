@@ -9,8 +9,6 @@ class Scenario extends StatefulWidget {
 }
 
 class _ScenarioState extends State<Scenario> {
-  final _contentEditController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
