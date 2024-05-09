@@ -1,7 +1,5 @@
-import 'package:capstone_project/component/EmotionCard.dart';
 import 'package:capstone_project/model/createScenarioDto.dart';
-import 'package:capstone_project/network/scenatio_update_service.dart';
-import 'package:capstone_project/screen/Login.dart';
+import 'package:capstone_project/network/my_scenario_service.dart';
 import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -13,10 +11,10 @@ import 'package:flutter/widgets.dart';
 class CreateSpeechPage extends StatefulWidget{
   CreateSpeechPage({super.key,required this.scenarioId,required this.scenarioID_ID, required this.text, required this.emotion});
 
-  int scenarioId;
-  int scenarioID_ID;
-  String text;
-  String emotion;
+  final int scenarioId;
+  final int scenarioID_ID;
+  final String text;
+  final String emotion;
   
   @override
   State<StatefulWidget> createState()=> _MyCheckBoxState();
@@ -41,7 +39,6 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
   @override
   Widget build(BuildContext context) {
     int _scenarioID=widget.scenarioId;
-    int _scenarioID_ID=widget.scenarioID_ID;
     String _emotion=widget.emotion;
     double weth=MediaQuery.of(context).size.width;
     double hight=MediaQuery.of(context).size.height;
@@ -65,7 +62,7 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
           actions: [
             TextButton(onPressed: (){
               print("$_controller");
-              dynamic statusCode = scenarioUpdateService.UpdateSceanrio(CreateScenarioDto(_scenarioID, _controller.toString(), _emotion));
+              dynamic statusCode = myScenarioService.UpdateSceanrio(CreateScenarioDto(_scenarioID, _controller.toString(), _emotion));
               if(statusCode!=201){
                 showSnackDeny(context);
               }

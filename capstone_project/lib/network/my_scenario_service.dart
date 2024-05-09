@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:capstone_project/model/bringScenarioDto.dart';
 import 'package:capstone_project/model/bringTranscriptDto.dart';
 import 'package:capstone_project/model/checkEvaluationProgressDto.dart';
+import 'package:capstone_project/model/createScenarioDto.dart';
 
 import 'package:capstone_project/network/const.dart';
 import 'package:http/http.dart' as http;
@@ -64,6 +65,21 @@ class MyScenarioService {
     } catch (e) {
       Logger().e(e);
       throw Exception(e);
+    }
+  }
+
+  Future<dynamic> UpdateSceanrio(CreateScenarioDto dto) async{
+    try{
+      final url= Uri.parse("$myScenarioUrl/sentences");
+      
+      final response = await http.post(url, body: jsonEncode(dto.toJson()),headers: {"Content-Type":"application/json"});//headers: {"Content-Type":"application/json"}
+      Logger().d(response.body);
+      Logger().d(response.statusCode);
+      return response.statusCode; 
+
+    }
+    catch (e){
+      Logger().d(e);
     }
   }
 }

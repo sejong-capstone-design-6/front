@@ -1,86 +1,79 @@
-import 'package:capstone_project/component/EmotionCard.dart';
 import 'package:capstone_project/model/createScenarioDto.dart';
-import 'package:capstone_project/network/scenatio_update_service.dart';
-import 'package:capstone_project/screen/Login.dart';
-import 'package:capstone_project/screen/MyScenarioPage.dart';
+import 'package:capstone_project/network/my_scenario_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
+class CreateScenarioPage extends StatefulWidget {
+  CreateScenarioPage(
+      {super.key,
+      required this.scenarioId,
+      required this.scenarioID_ID,
+      required this.text,
+      required this.emotion});
 
-
-
-
-class CreateScenarioPage extends StatefulWidget{
-  CreateScenarioPage({super.key,required this.scenarioId,required this.scenarioID_ID, required this.text, required this.emotion});
-
-  int scenarioId;
-  int scenarioID_ID;
-  String text;
-  String emotion;
+  final int scenarioId;
+  final int scenarioID_ID;
+  final String text;
+  final String emotion;
 
   @override
-  State<StatefulWidget> createState()=> _MyCheckBoxState();
-  
-
+  State<StatefulWidget> createState() => _MyCheckBoxState();
 }
 
-class _MyCheckBoxState extends State<CreateScenarioPage>{
-  bool isnormal=false;
-  bool isaccent=false;
-  bool scenarioMode=true;
-  final _controller= TextEditingController();
+class _MyCheckBoxState extends State<CreateScenarioPage> {
+  bool isnormal = false;
+  bool isaccent = false;
+  bool scenarioMode = true;
+  final _controller = TextEditingController();
   late List<bool> isSelected;
 
-  void initState(){
-    isSelected=[isnormal,isaccent];
+  void initState() {
+    isSelected = [isnormal, isaccent];
     super.initState();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    int _scenarioID=widget.scenarioId;
-    int _scenarioID_ID=widget.scenarioID_ID;
-    String _emotion=widget.emotion;
-    double weth=MediaQuery.of(context).size.width;
-    double hight=MediaQuery.of(context).size.height;
+    int _scenarioID = widget.scenarioId;
+    String _emotion = widget.emotion;
+    double weth = MediaQuery.of(context).size.width;
+    double hight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(48.0),
         child: AppBar(
           leading: IconButton(
-            onPressed: (){
-        
-            },
+            onPressed: () {},
             color: Colors.white,
             icon: Icon(Icons.keyboard_arrow_left),
             iconSize: 24,
           ),
-          title: Text("Capstone Speech",
-            style: TextStyle(
-              fontSize: 16,color: Colors.white),),
+          title: Text(
+            "Capstone Speech",
+            style: TextStyle(fontSize: 16, color: Colors.white),
+          ),
           centerTitle: true,
           titleSpacing: 6.5,
           actions: [
-            TextButton(onPressed: ()async{
-              String text=_controller.text;
-              dynamic statusCode = await scenarioUpdateService.UpdateSceanrio(CreateScenarioDto(_scenarioID, text, _emotion));
-              print(statusCode);
-              print("$_scenarioID        $text                $_emotion");
-              //Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
-              
-            }, 
-            child: Text("완료",
-              style: TextStyle(color: Colors.white,fontSize: 16.0),))
+            TextButton(
+                onPressed: () async {
+                  String text = _controller.text;
+                  dynamic statusCode =
+                      await myScenarioService.UpdateSceanrio(
+                          CreateScenarioDto(_scenarioID, text, _emotion));
+                  print(statusCode);
+                  print("$_scenarioID        $text                $_emotion");
+                  //Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
+                },
+                child: Text(
+                  "완료",
+                  style: TextStyle(color: Colors.white, fontSize: 16.0),
+                ))
           ],
         ),
       ),
-      
-
       body: Stack(
-        
         children: [
-          
           Container(
             height: hight,
             child: SingleChildScrollView(
@@ -90,25 +83,21 @@ class _MyCheckBoxState extends State<CreateScenarioPage>{
                     margin: EdgeInsets.all(16.0),
                     padding: EdgeInsets.all(16.0),
                     width: double.infinity,
-                    height: hight-140,
+                    height: hight - 140,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                       color: Color.fromARGB(255, 28, 28, 30),
                     ),
-            
                     child: TextField(
                       controller: _controller,
                       decoration: InputDecoration(
                         focusedBorder: OutlineInputBorder(
                           borderSide: BorderSide(
-                            color: Color.fromARGB(255, 28, 28, 30)
-                          ),
+                              color: Color.fromARGB(255, 28, 28, 30)),
                         ),
                         enabledBorder: OutlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Color.fromARGB(255, 28, 28, 30)
-                          )
-                        ),
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 28, 28, 30))),
                       ),
                       maxLines: 25,
                       style: TextStyle(
@@ -121,8 +110,6 @@ class _MyCheckBoxState extends State<CreateScenarioPage>{
               ),
             ),
           ),
-
-
           Positioned(
             left: 16.0,
             bottom: 0.0,
@@ -130,80 +117,88 @@ class _MyCheckBoxState extends State<CreateScenarioPage>{
               padding: EdgeInsets.symmetric(vertical: 0),
               color: Color.fromARGB(0, 0, 0, 0),
               height: 40.0,
-              width: weth-32.0,
+              width: weth - 32.0,
               child: ToggleButtons(
-                selectedColor: Colors.black,//선택글자 색
-                fillColor: Colors.blueGrey,//선택 칸 색
+                selectedColor: Colors.black, //선택글자 색
+                fillColor: Colors.blueGrey, //선택 칸 색
                 color: Colors.white,
                 children: [
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),//간격=16
-                    child: Row(
-                      children: [
-                        Text("평범",style: TextStyle(color: Colors.white),),
-                        Icon(Icons.circle,color: Colors.white,size: 16,),
-                      ],
-                    )
-                  ),
+                      padding: EdgeInsets.symmetric(horizontal: 16), //간격=16
+                      child: Row(
+                        children: [
+                          Text(
+                            "평범",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                          Icon(
+                            Icons.circle,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                        ],
+                      )),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16),
-                    child: Row(
-                      children: [
-                        Text("강조",style: TextStyle(color: Colors.red),),
-                        Icon(Icons.circle,color: Colors.red,size: 16,),
-                      ],
-                    )
-                  ),  
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: Row(
+                        children: [
+                          Text(
+                            "강조",
+                            style: TextStyle(color: Colors.red),
+                          ),
+                          Icon(
+                            Icons.circle,
+                            color: Colors.red,
+                            size: 16,
+                          ),
+                        ],
+                      )),
                 ],
                 isSelected: isSelected,
                 onPressed: toggleselect,
               ),
             ),
           ),
-
           Positioned(
-            right: 16.0,
-            bottom: 50.0,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor:Color.fromARGB(255, 0, 125, 167),
-                shape: CircleBorder(),
-                padding: EdgeInsets.all(10.0)
-              ),
-              onPressed: (){},
-              child: Text("AI",style: TextStyle(color: Colors.white,fontSize: 18.0),),
-
-          ))
+              right: 16.0,
+              bottom: 50.0,
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 0, 125, 167),
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(10.0)),
+                onPressed: () {},
+                child: Text(
+                  "AI",
+                  style: TextStyle(color: Colors.white, fontSize: 18.0),
+                ),
+              ))
         ],
       ),
     );
   }
-    
-  void toggleselect(value){
-    if(value==0){
-      isnormal=true;
-      isaccent=false;
-    }
-    else{
-      isnormal=false;
-      isaccent=true;
+
+  void toggleselect(value) {
+    if (value == 0) {
+      isnormal = true;
+      isaccent = false;
+    } else {
+      isnormal = false;
+      isaccent = true;
     }
     setState(() {
-      isSelected=[isnormal,isaccent];
+      isSelected = [isnormal, isaccent];
     });
   }
 }
-      
 
-void showSnackDeny(BuildContext context){
-
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: 
-    Text('문제가 발생했습니다.',
-    textAlign: TextAlign.center,),
+void showSnackDeny(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+    content: Text(
+      '문제가 발생했습니다.',
+      textAlign: TextAlign.center,
+    ),
     duration: Duration(seconds: 2),
     backgroundColor: Colors.blue,
-
-    )
-  );
+  ));
 }

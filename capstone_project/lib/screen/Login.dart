@@ -1,8 +1,6 @@
 import 'package:capstone_project/model/logInDto.dart';
 import 'package:capstone_project/MainPage.dart';
-import 'package:capstone_project/model/signUpDto.dart';
 import 'package:capstone_project/network/auth_service.dart';
-import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:capstone_project/screen/SignUp.dart';
 import 'package:flutter/material.dart';
 
@@ -44,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
                   height: 38.0,
                   width: double.infinity,
                   margin: const EdgeInsets.fromLTRB(9.0, 0.0, 9.0, 0.0),
-                  padding: const EdgeInsets.fromLTRB(16.0, 14.0, 16.0, 2.0),
                   padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0.0),
                   child: const Text(
                     "Email",
@@ -128,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MyScenarioPage(scenarioId: 1)));
+                                builder: (context) => MainPage()));
                       } else if (Emailinput.text.isEmpty == true) {
                         showSnackEmailinput(context);
                       } else if (Passwordinput.text.isEmpty == true) {

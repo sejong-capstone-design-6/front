@@ -1,7 +1,6 @@
 import 'package:capstone_project/provider/check_evaluation_done_provider.dart';
 import 'package:capstone_project/screen/SplashPage.dart';
 import 'package:capstone_project/model/date.dart';
-import 'package:capstone_project/services/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
