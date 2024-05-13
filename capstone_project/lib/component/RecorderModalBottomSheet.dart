@@ -43,16 +43,18 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
     int id = 0;
     while (!status) {
       Logger().d('Loop 1');
-      var value = await myScenarioService.checkEvaluationComplete(sentenceId);
+
+      if (!status) {
+        await Future.delayed(Duration(seconds: 1)); // 1초 대기
+      }
+
+      var value = await myScenarioService.checkEvaluationComplete(
+          sentenceId, transcriptId);
       if (value.status != null) {
         status = value.status!;
         id = value.transcriptId!;
         Logger().d(status);
         Logger().d(id);
-      }
-
-      if (!status) {
-        await Future.delayed(Duration(seconds: 1)); // 1초 대기
       }
     }
     Logger().d('Evaluation complete');
@@ -74,7 +76,8 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
   }
 
   void _startRecording() async {
-    await _audioRecorder!.startRecorder(toFile: _filePath, codec: Codec.pcm16WAV);
+    await _audioRecorder!
+        .startRecorder(toFile: _filePath, codec: Codec.pcm16WAV);
     setState(() {
       _isRecording = true;
       _recordDuration = 0;
@@ -96,6 +99,9 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
     final audioFile = File(path!);
     await _audioRecorder!.closeRecorder();
     _timer?.cancel();
+    final dto =
+        await myScenarioService.uploadVoice(widget.sentenceId, _filePath);
+    transcriptId = dto.transcriptId;
     setState(() {
       _isRecording = false;
     });

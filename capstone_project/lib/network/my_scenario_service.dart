@@ -2,10 +2,12 @@ import 'dart:convert';
 
 import 'package:capstone_project/model/bringScenarioDto.dart';
 import 'package:capstone_project/model/bringTranscriptDto.dart';
+import 'package:capstone_project/model/bringTranscriptIdDto.dart';
 import 'package:capstone_project/model/checkEvaluationProgressDto.dart';
 import 'package:capstone_project/model/createScenarioDto.dart';
 
 import 'package:capstone_project/network/const.dart';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 import 'package:logger/logger.dart';
 
@@ -50,10 +52,11 @@ class MyScenarioService {
     }
   }
 
-  Future<CheckEvaluationProgressDto> checkEvaluationComplete(int sentenceId) async {
+  Future<CheckEvaluationProgressDto> checkEvaluationComplete(
+      int sentenceId, int transcriptId) async {
     try {
       final url = Uri.parse(
-          "$myScenarioUrl/sentences/$sentenceId/evaluations/progress");
+          "$myScenarioUrl/sentences/$sentenceId/evaluations/$transcriptId/progress");
       final response = await http.get(url);
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
@@ -68,18 +71,40 @@ class MyScenarioService {
     }
   }
 
-  Future<dynamic> updateSceanrio(CreateScenarioDto dto) async{
-    try{
-      final url= Uri.parse("$myScenarioUrl/sentences");
-      
-      final response = await http.post(url, body: jsonEncode(dto.toJson()),headers: {"Content-Type":"application/json"});//headers: {"Content-Type":"application/json"}
-      Logger().d(response.body);
-      Logger().d(response.statusCode);
-      return response.statusCode; 
+  Future<dynamic> updateSceanrio(CreateScenarioDto dto) async {
+    try {
+      final url = Uri.parse("$myScenarioUrl/sentences");
 
-    }
-    catch (e){
+      final response = await http.post(url,
+          body: jsonEncode(dto.toJson()),
+          headers: {
+            "Content-Type": "application/json"
+          }); //headers: {"Content-Type":"application/json"}
+      return response.statusCode;
+    } catch (e) {
       Logger().d(e);
+    }
+  }
+
+  Future<BringTranscriptIdDto> uploadVoice(int sentenceId, String filePath) async {
+    try {
+      var dio = Dio();
+      var formData =
+          FormData.fromMap({'file': await MultipartFile.fromFile(filePath)});
+
+      final response = await dio.post(
+          '$myScenarioUrl/sentences/$sentenceId/evaluations',
+          data: formData);
+
+      if (response.statusCode == 201) {
+        final dto = BringTranscriptIdDto.fromJson(response.data);
+        return dto;
+      } else {
+        throw Exception(response.statusCode);
+      }
+    } catch (e) {
+      Logger().e(e);
+      throw Exception();
     }
   }
 }
