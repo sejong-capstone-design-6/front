@@ -7,11 +7,12 @@ import 'package:flutter/material.dart';
 class BasicEvaluationPage extends StatefulWidget {
   final String title;
   final String sentenceEmotion;
+  final String sentence;
   final int sentenceId;
   final int transcriptId;
 
-  BasicEvaluationPage(
-      this.title, this.sentenceEmotion, this.sentenceId, this.transcriptId);
+  BasicEvaluationPage(this.title, this.sentenceEmotion, this.sentence,
+      this.sentenceId, this.transcriptId);
   @override
   State<StatefulWidget> createState() => _BasicEvaluationPage();
 }
@@ -31,6 +32,30 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
         isLoading = false;
       });
     });
+  }
+
+  Map<String, Color> compareSentences(String sentence1, String sentence2) {
+    List<String> words1 = sentence1.split(' ');
+    List<String> words2 = sentence2.split(' ');
+
+    // 같은 단어는 파란색, 다른 단어는 회색으로 표시
+    Map<String, Color> wordColors = {};
+
+    for (String word in words1) {
+      if (words2.contains(word)) {
+        wordColors[word] = Color(0xff4169E1);
+      } else {
+        wordColors[word] = Color(0xff636367);
+      }
+    }
+
+    for (String word in words2) {
+      if (!wordColors.containsKey(word)) {
+        wordColors[word] = Color(0xff636367);
+      }
+    }
+
+    return wordColors;
   }
 
   @override
@@ -58,7 +83,9 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                       Padding(
                         padding:
                             const EdgeInsets.only(left: 16, right: 16, top: 16),
-                        child: Text('${transcriptDto.speechToText}'),
+                        child: ComparedSentence(
+                            widget.sentence.replaceAll('.', ''),
+                            transcriptDto.speechToText),
                       ),
                       SizedBox(
                         height: 8,
@@ -154,6 +181,25 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: Padding(
+                          padding: const EdgeInsets.only(left: 16, right: 16),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Text("연습하러가기"),
+                              Icon(
+                                Icons.keyboard_arrow_right,
+                                color: Colors.white,
+                              )
+                            ],
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 )),
@@ -196,6 +242,28 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
               fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
         ),
       ],
+    );
+  }
+
+  Widget ComparedSentence(String sentence1, String sentence2) {
+    Map<String, Color> comparisonResults =
+        compareSentences(sentence1, sentence2);
+
+    List<TextSpan> spans = [];
+    sentence1.split(' ').forEach((word) {
+      spans.add(
+        TextSpan(
+          text: '$word ',
+          style: TextStyle(color: comparisonResults[word],),
+        ),
+      );
+    });
+
+    return RichText(
+      text: TextSpan(
+        children: spans,
+        style: TextStyle(fontSize: 16), // 기본 스타일 지정
+      ),
     );
   }
 }

@@ -16,8 +16,9 @@ class RecorderModalBottomSheet extends StatefulWidget {
   final String title;
   final String sentenceEmotion;
   final int sentenceId;
+  final String sentence;
 
-  RecorderModalBottomSheet(this.title, this.sentenceEmotion, this.sentenceId);
+  RecorderModalBottomSheet(this.title, this.sentence, this.sentenceEmotion, this.sentenceId);
   @override
   State<StatefulWidget> createState() => _RecorderModalBottomSheet();
 }
@@ -158,6 +159,7 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
           builder: (context) => BasicEvaluationPage(
               widget.title,
               widget.sentenceEmotion,
+              widget.sentence,
               widget.sentenceId,
               transcriptId))); // 다음 페이지로 이동
     });

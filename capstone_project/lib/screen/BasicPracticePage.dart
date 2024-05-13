@@ -38,7 +38,7 @@ class _BasicPracticePage extends State<BasicPracticePage> {
       barrierColor: Colors.transparent,
       isDismissible: false,
       builder: (context) {
-        return RecorderModalBottomSheet(widget.title, widget.emotion, widget.id);
+        return RecorderModalBottomSheet(widget.title, widget.text, widget.emotion, widget.id);
       },
     );
   }
