@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:capstone_project/component/BasicAppBar.dart';
 import 'package:capstone_project/component/EmotionChip.dart';
+import 'package:capstone_project/component/TranscriptPageAppBar.dart';
 import 'package:capstone_project/model/bringTranscriptDto.dart';
 import 'package:capstone_project/network/my_scenario_service.dart';
 import 'package:capstone_project/screen/BasicPracticePage.dart';
@@ -68,7 +68,7 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
         : Scaffold(
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(48.0),
-              child: BasicAppBar(widget.title),
+              child: TranscriptPageAppBar(widget.title),
             ),
             body: Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
