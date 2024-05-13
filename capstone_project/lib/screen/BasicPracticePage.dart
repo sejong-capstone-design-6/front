@@ -9,6 +9,7 @@ class BasicPracticePage extends StatefulWidget {
   final String text;
   final String emotion;
   final String? proposedRevision;
+  final String? proposedEmotion;
 
   BasicPracticePage(
       {super.key,
@@ -16,7 +17,8 @@ class BasicPracticePage extends StatefulWidget {
       required this.title,
       required this.text,
       required this.emotion,
-      this.proposedRevision});
+      this.proposedRevision,
+      this.proposedEmotion});
 
   @override
   State<StatefulWidget> createState() => _BasicPracticePage();
@@ -38,15 +40,14 @@ class _BasicPracticePage extends State<BasicPracticePage> {
       barrierColor: Colors.transparent,
       isDismissible: false,
       builder: (context) {
-        return RecorderModalBottomSheet(widget.title, widget.text, widget.emotion, widget.id);
+        return RecorderModalBottomSheet(
+            widget.title, widget.text, widget.emotion, widget.id);
       },
     );
   }
 
   @override
-  Widget build(BuildContext context) { 
-    
-
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
           preferredSize: Size.fromHeight(48.0),
@@ -108,10 +109,43 @@ class _BasicPracticePage extends State<BasicPracticePage> {
                           ],
                         ),
                       )
+                    : SizedBox(),
+                SizedBox(
+                  height: 48,
+                ),
+                widget.proposedEmotion != null
+                    ? Padding(
+                        padding: const EdgeInsets.only(left: 16, right: 16),
+                        child: Center(
+                          child: ProposedEmotionLabel(widget.proposedEmotion!),
+                        ))
                     : SizedBox()
               ],
             ),
           )),
+    );
+  }
+
+  Widget ProposedEmotionLabel(String emotion) {
+    Color color = Colors.white;
+    if (emotion == "평범") {
+      color = Color(0xff6A5ACD);
+    } else if (emotion == "분노") {
+      color = Color.fromARGB(255, 172, 0, 0);
+    } else if (emotion == "웃음") {
+      color = Color(0xffFFD700);
+    } else if (emotion == "슬픔") {
+      color = Color.fromARGB(255, 65, 105, 225);
+    } else if (emotion == "놀라움") {
+      color = Color(0xff32CD32);
+    } else if (emotion == "두려움") {
+      color = Color(0xff8E9A30);
+    } else {
+      color = Colors.white;
+    }
+    return Text(
+      '$emotion',
+      style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600, color: color),
     );
   }
 }

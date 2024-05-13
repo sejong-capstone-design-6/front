@@ -1,7 +1,10 @@
+import 'dart:math';
+
 import 'package:capstone_project/component/BasicAppBar.dart';
 import 'package:capstone_project/component/EmotionChip.dart';
 import 'package:capstone_project/model/bringTranscriptDto.dart';
 import 'package:capstone_project/network/my_scenario_service.dart';
+import 'package:capstone_project/screen/BasicPracticePage.dart';
 import 'package:flutter/material.dart';
 
 class BasicEvaluationPage extends StatefulWidget {
@@ -184,26 +187,60 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                       SizedBox(
                         height: 10,
                       ),
-                      InkWell(
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 16, right: 16),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text("연습하러가기"),
-                              Icon(
-                                Icons.keyboard_arrow_right,
-                                color: Colors.white,
-                              )
-                            ],
-                          ),
-                        ),
-                      )
+                      transcriptDto.correctionProposal.id == 0
+                          ? SizedBox()
+                          : InkWell(
+                              onTap: () {
+                                if (transcriptDto.correctionProposal.id ==
+                                    2 | 4) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => BasicPracticePage(
+                                            id: widget.sentenceId,
+                                            title: widget.title,
+                                            text: widget.sentence,
+                                            emotion: widget.sentenceEmotion,
+                                            proposedRevision: transcriptDto
+                                                .correctionProposal.proposal,
+                                          )));
+                                } else if(transcriptDto.correctionProposal.id == 1) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => BasicPracticePage(
+                                            id: widget.sentenceId,
+                                            title: widget.title,
+                                            text: widget.sentence,
+                                            emotion: widget.sentenceEmotion,
+                                            proposedRevision: transcriptDto
+                                                .correctionProposal.proposal,
+                                            proposedEmotion: randomEmotion(),
+                                          )));
+                                }
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 16, right: 16),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text("연습하러가기",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600)),
+                                    Icon(
+                                      Icons.keyboard_arrow_right,
+                                      color: Colors.white,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
                     ],
                   ),
                 )),
           );
+  }
+
+  randomEmotion() {
+    final emotions = ["평범", "분노", "웃음", "슬픔", "놀라움", "두려움"];
+    return emotions[Random().nextInt(6)];
   }
 
   Widget AIEmotion(String value) {
@@ -254,7 +291,9 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
       spans.add(
         TextSpan(
           text: '$word ',
-          style: TextStyle(color: comparisonResults[word],),
+          style: TextStyle(
+            color: comparisonResults[word],
+          ),
         ),
       );
     });
