@@ -1,6 +1,6 @@
 import 'package:capstone_project/model/logInDto.dart';
 import 'package:capstone_project/network/auth_service.dart';
-import 'package:capstone_project/provider/my_scenario_provider.dart';
+import 'package:capstone_project/provider/movie_scenario_provider.dart';
 import 'package:capstone_project/screen/SignUp.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -123,8 +123,10 @@ class _LoginPageState extends State<LoginPage> {
                       if (Emailinput.text.isEmpty == false &&
                           Passwordinput.text.isEmpty == false &&
                           statusCode == 201) {
-                        context.read<MyScenarioProvider>().setScenarioId(1);
-                        Navigator.pushNamed(context, '/my_scenario');
+                        //context.read<MyScenarioProvider>().setScenarioId(1);
+                        context.read<MovieScenarioProvider>().setScenarioId(1);
+                        context.read<MovieScenarioProvider>().setTitle("tet");
+                        Navigator.pushNamed(context, '/movie_scenario');
                       } else if (Emailinput.text.isEmpty == true) {
                         showSnackEmailinput(context);
                       } else if (Passwordinput.text.isEmpty == true) {
