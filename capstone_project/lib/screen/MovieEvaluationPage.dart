@@ -239,7 +239,8 @@ class _MovieEvaluationPage extends State<MovieEvaluationPage> {
                                       ],
                                     ),
                                   ),
-                                )
+                                ),
+                                SizedBox(height: 30,)
                         ],
                       ),
                     ))),
