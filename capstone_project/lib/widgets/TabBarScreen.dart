@@ -1,6 +1,7 @@
 import 'package:capstone_project/screen/Scenario.dart';
 import 'package:capstone_project/services/api_service.dart';
 import 'package:capstone_project/component/MovieCard.dart';
+import 'package:capstone_project/component/ScenarioCard.dart';
 import 'package:flutter/material.dart';
 
 class TabBarScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class _TabBarScreenState extends State<TabBarScreen>
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 576,
+      height: 600,
       child: Scaffold(
         backgroundColor: Colors.black,
         body: Column(

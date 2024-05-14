@@ -118,15 +118,17 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   child: OutlinedButton(
                     onPressed: () async {
-                      dynamic statusCode = await authSercive.logIn(
-                          LogInDto(Emailinput.text, Passwordinput.text));
+                      dynamic statusCode = await authSercive
+                          .logIn(LogInDto(Emailinput.text, Passwordinput.text));
                       if (Emailinput.text.isEmpty == false &&
                           Passwordinput.text.isEmpty == false &&
                           statusCode == 201) {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MyScenarioPage(scenarioId: 1)));
+                                builder: (context) =>
+                                    //MyScenarioPage(scenarioId: 1)));
+                                    MainPage()));
                       } else if (Emailinput.text.isEmpty == true) {
                         showSnackEmailinput(context);
                       } else if (Passwordinput.text.isEmpty == true) {
@@ -212,7 +214,5 @@ void showSnackError(BuildContext context) {
     ),
     duration: Duration(seconds: 2),
     backgroundColor: Colors.blue,
-
-    )
-  );
+  ));
 }
