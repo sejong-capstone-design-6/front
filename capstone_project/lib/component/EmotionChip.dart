@@ -59,7 +59,15 @@ Widget EmotionLabel(String value) {
       style: TextStyle(
           fontSize: 12, color: Color(0xff8E9A30), fontWeight: FontWeight.w700),
     );
-  } else {
+  } else if (value == "강조") {
+    return Text(
+      value,
+      style: TextStyle(
+          fontSize: 12,
+          color: Color.fromARGB(255, 172, 0, 0),
+          fontWeight: FontWeight.bold),
+    );
+  }else {
     return Text("");
   }
 }

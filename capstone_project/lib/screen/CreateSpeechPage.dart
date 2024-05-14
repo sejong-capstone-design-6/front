@@ -1,3 +1,4 @@
+import 'package:capstone_project/component/EmotionChip.dart';
 import 'package:capstone_project/model/createScenarioDto.dart';
 import 'package:capstone_project/model/reviseSentenceDto.dart';
 import 'package:capstone_project/network/my_scenario_service.dart';
@@ -11,11 +12,11 @@ import 'package:flutter/material.dart';
 
 
 class CreateSpeechPage extends StatefulWidget{
-  CreateSpeechPage({super.key,required this.scenarioId,required this.text ,required this.emotion, required this.isRevise});
+  CreateSpeechPage({super.key,required this.userId,required this.scenarioId,required this.text ,required this.emotion, required this.isRevise});
+  final int userId;
   final int scenarioId;
   final String text;
   final String emotion;
-
   final bool isRevise;
 
   @override
@@ -29,7 +30,10 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
   bool isaccent=false;
   late List<bool> isSelected;
 
+  final _controller = TextEditingController();
+
   void initState(){
+    _controller.text=widget.text;
     if (widget.emotion=="평범") {
       isnormal=true;
     }
@@ -43,11 +47,12 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
 
   @override
   Widget build(BuildContext context) {
+    int _userId=widget.userId;
     int _scenarioID=widget.scenarioId;
-    String _emotion=widget.emotion;
+    String _emotion = widget.emotion;
     double weth=MediaQuery.of(context).size.width;
     double hight=MediaQuery.of(context).size.height;
-    final _controller= TextEditingController(text: widget.text);
+
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(48.0),
@@ -86,11 +91,9 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
                 }
               }
               else{
-                dynamic response = await reviseSentenceService.ReviseSentence(ReviseSentenceDto(text));
-                dynamic s=response.body;
-                print("$s");
-                if(response.statusCode==201){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
+                dynamic response = await reviseSentenceService.ReviseSentence(ReviseSentenceDto(_scenarioID,text,_emotion));
+                if(response.statusCode==200){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _userId)));
                 }
                 else{
                   showSnackDeny(context);
@@ -167,8 +170,7 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
                     padding: EdgeInsets.symmetric(horizontal: 16),//간격=16
                     child: Row(
                       children: [
-                        Text("평범",style: TextStyle(color: Colors.white),),
-                        Icon(Icons.circle,color: Colors.white,size: 16,),
+                        EmotionChip("평범")
                       ],
                     )
                   ),
@@ -176,8 +178,7 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Row(
                       children: [
-                        Text("강조",style: TextStyle(color: Colors.red),),
-                        Icon(Icons.circle,color: Colors.red,size: 16,),
+                        EmotionChip("강조")
                       ],
                     )
                   ),  
