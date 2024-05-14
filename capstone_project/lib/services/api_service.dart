@@ -67,7 +67,7 @@ class ApiService {
     }
   }
 
-  void getMyScenarios() async {
+  Future getMyScenarios() async {
     String uid = _userId.toString();
     final url = Uri.parse('$baseUrl/$scenarioApi?uid={$uid}');
     final response = await http.get(url);
