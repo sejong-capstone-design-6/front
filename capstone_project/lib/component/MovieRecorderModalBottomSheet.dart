@@ -1,28 +1,35 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:capstone_project/component/CompleteModal.dart';
 import 'package:capstone_project/component/WaitingModal.dart';
-import 'package:capstone_project/network/my_scenario_service.dart';
-import 'package:capstone_project/screen/BasicEvaluationPage.dart';
+import 'package:capstone_project/model/bringScenarioSentenceDto.dart';
+import 'package:capstone_project/network/movie_scenario_service.dart';
+import 'package:capstone_project/screen/MovieEvaluationPage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_sound/public/flutter_sound_recorder.dart';
+import 'package:flutter_sound/flutter_sound.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:logger/logger.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class RecorderModalBottomSheet extends StatefulWidget {
+class MovieRecorderModalBottomSheet extends StatefulWidget {
   final String title;
-  final String sentenceEmotion;
-  final int sentenceId;
+  final int scenarioId;
+  final List<Sentence> sentences;
 
-  RecorderModalBottomSheet(this.title, this.sentenceEmotion, this.sentenceId);
+  MovieRecorderModalBottomSheet(this.title, this.scenarioId, this.sentences);
+
   @override
-  State<StatefulWidget> createState() => _RecorderModalBottomSheet();
+  State<MovieRecorderModalBottomSheet> createState() =>
+      _MovieRecorderModalBottomSheet();
 }
 
-class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
+class _MovieRecorderModalBottomSheet
+    extends State<MovieRecorderModalBottomSheet> {
   FlutterSoundRecorder? _audioRecorder;
   bool _isRecording = false;
-  String? _filePath;
+  late String _filePath;
   Timer? _timer;
   int _recordDuration = 0; // 녹음 시간을 초로 계산
   bool isEvaluationDone = false;
@@ -35,36 +42,23 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
     _initializeRecorder();
   }
 
-
-  Future<int> _checkEvaluationComplete(int sentenceId) async {
-    bool status = false;
-    int id = 0;
-    while (!status) {
-      Logger().d('Loop 1');
-      var value = await myScenarioService.checkEvaluationComplete(sentenceId);
-      if (value.status != null) {
-        status = value.status!;
-        id = value.transcriptId!;
-        Logger().d(status);
-        Logger().d(id);
-      }
-
-      if (!status) {
-        await Future.delayed(Duration(seconds: 1)); // 1초 대기
-      }
-    }
-    Logger().d('Evaluation complete');
-    return id;
-  }
-
   Future<void> _initializeRecorder() async {
-    _filePath = '/my_recording.aac';
-    await _audioRecorder!.openRecorder();
-    _startRecording();
+    final status = await Permission.microphone.request();
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String appDocPath = appDocDir.path;
+    _filePath = '$appDocPath/${DateTime.now()}.wav';
+
+    if (status == PermissionStatus.granted) {
+      await _audioRecorder!.openRecorder();
+      _startRecording();
+    } else {
+      throw "MicroPhone is not permitted";
+    }
   }
 
   void _startRecording() async {
-    await _audioRecorder!.startRecorder(toFile: _filePath);
+    await _audioRecorder!
+        .startRecorder(toFile: _filePath, codec: Codec.pcm16WAV);
     setState(() {
       _isRecording = true;
       _recordDuration = 0;
@@ -72,27 +66,36 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
     _startTimer();
   }
 
-  void _stopRecording() async {
-    await _audioRecorder!.stopRecorder();
-    _timer?.cancel();
-    setState(() {
-      _isRecording = false;
+  void _startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        _recordDuration++;
+      });
     });
-    if (_filePath != null) {
-      print('Recording saved to: $_filePath');
-    }
   }
 
-  Future<void> _uploadAudio() async {
+  void _recallRecording() async {
     await _audioRecorder!.pauseRecorder();
     await _audioRecorder!.closeRecorder();
     _timer?.cancel();
     setState(() {
       _isRecording = false;
     });
-    if (_filePath != null) {
-      print('Recording saved to: $_filePath');
-    }
+  }
+
+  Future<void> _uploadAudio() async {
+    final path = await _audioRecorder!.stopRecorder();
+    final audioFile = File(path!);
+    await _audioRecorder!.closeRecorder();
+    _timer?.cancel();
+    final dto =
+        await movieScenarioService.uploadVoice(widget.scenarioId, 1, _filePath);
+    transcriptId = dto.transcriptId;
+    setState(() {
+      _isRecording = false;
+    });
+
+    print('Recording saved to: $audioFile');
   }
 
   void _pauseRecording() async {
@@ -111,12 +114,27 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
     });
   }
 
-  void _startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(() {
-        _recordDuration++;
-      });
-    });
+  Future<int> _checkEvaluationComplete(int scenarioId) async {
+    bool status = false;
+    int id = 0;
+    while (!status) {
+      Logger().d('Loop 1');
+
+      if (!status) {
+        await Future.delayed(Duration(seconds: 1)); // 1초 대기
+      }
+
+      var value = await movieScenarioService.checkEvaluationComplete(
+          scenarioId, transcriptId);
+      if (value.status != null) {
+        status = value.status!;
+        id = value.transcriptId!;
+        Logger().d(status);
+        Logger().d(id);
+      }
+    }
+    Logger().d('Evaluation complete');
+    return id;
   }
 
   _waitVoiceFileEvaluation() async {
@@ -126,7 +144,7 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
         builder: (context) {
           return WaitingModal();
         });
-    int transcriptId = await _checkEvaluationComplete(widget.sentenceId);
+    int transcriptId = await _checkEvaluationComplete(widget.scenarioId);
 
     Navigator.of(context).pop();
 
@@ -141,8 +159,11 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
       Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => BasicEvaluationPage(widget.title,
-              widget.sentenceEmotion, widget.sentenceId, transcriptId))); // 다음 페이지로 이동
+          builder: (context) => MovieEvaluationPage(
+              widget.title,
+              widget.sentences,
+              widget.scenarioId,
+              transcriptId))); // 다음 페이지로 이동
     });
   }
 
@@ -219,7 +240,7 @@ class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
                           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         ),
                         onPressed: () {
-                          _stopRecording();
+                          _recallRecording();
                           Navigator.pop(context);
                         },
                         child: Text(

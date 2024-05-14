@@ -1,5 +1,3 @@
-
-
 class BringScenarioDto{
   int id;
   String title;

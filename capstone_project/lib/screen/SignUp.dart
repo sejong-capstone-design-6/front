@@ -1,9 +1,7 @@
 import 'package:capstone_project/model/signUpDto.dart';
 import 'package:capstone_project/network/auth_service.dart';
 import 'package:capstone_project/screen/Login.dart';
-import 'package:capstone_project/model/date.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:email_validator/email_validator.dart';
 
 class SignUp extends StatefulWidget {

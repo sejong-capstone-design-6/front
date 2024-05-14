@@ -1,35 +1,34 @@
 import 'package:capstone_project/component/BasicAppBar.dart';
-import 'package:capstone_project/component/EmotionChip.dart';
+import 'package:capstone_project/component/MovieRecorderModalBottomSheet.dart';
 import 'package:capstone_project/component/PropsoedEmotionLabel.dart';
-import 'package:capstone_project/component/BasicRecorderModalBottomSheet.dart';
+import 'package:capstone_project/model/bringScenarioSentenceDto.dart';
 import 'package:flutter/material.dart';
 
-class BasicPracticePage extends StatefulWidget {
+class MoviePracticePage2 extends StatefulWidget {
   final int id;
   final String title;
-  final String text;
-  final String emotion;
+  final List<Sentence> sentences;
   final String? proposedRevision;
   final String? proposedEmotion;
 
-  BasicPracticePage(
-      {super.key,
-      required this.id,
-      required this.title,
-      required this.text,
-      required this.emotion,
-      this.proposedRevision,
-      this.proposedEmotion});
+  MoviePracticePage2({
+    super.key,
+    required this.id,
+    required this.title,
+    required this.sentences,
+    this.proposedEmotion,
+    this.proposedRevision
+  });
 
   @override
-  State<StatefulWidget> createState() => _BasicPracticePage();
+  State<StatefulWidget> createState() => _MoviePracticePage2();
 }
 
-class _BasicPracticePage extends State<BasicPracticePage> {
-  late int transcriptId;
+class _MoviePracticePage2 extends State<MoviePracticePage2> {
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _showModalBottomSheet();
     });
@@ -41,8 +40,7 @@ class _BasicPracticePage extends State<BasicPracticePage> {
       barrierColor: Colors.transparent,
       isDismissible: false,
       builder: (context) {
-        return BasicRecorderModalBottomSheet(
-            widget.title, widget.text, widget.emotion, widget.id);
+        return MovieRecorderModalBottomSheet(widget.title, widget.id, widget.sentences);
       },
     );
   }
@@ -65,22 +63,23 @@ class _BasicPracticePage extends State<BasicPracticePage> {
                     topRight: Radius.circular(30))),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
-                  child: Text('${widget.text}'),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      EmotionChip(widget.emotion),
-                    ],
-                  ),
-                ),
+                Expanded(child: ListView.builder(
+                  itemCount: widget.sentences.length,
+                  itemBuilder: (context, index){
+                  return ListTile(
+                            title: Text(
+                              widget.sentences[index].speaker,
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white),
+                            ),
+                            subtitle: Text(
+                                widget.sentences[index].text,
+                                style: TextStyle(
+                                    fontSize: 14, color: Colors.white)),
+                          );
+                })),
                 widget.proposedRevision != null
                     ? Padding(
                         padding:

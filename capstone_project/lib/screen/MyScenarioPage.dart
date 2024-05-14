@@ -10,6 +10,8 @@ class MyScenarioPage extends StatefulWidget {
   final int scenarioId;
   MyScenarioPage({super.key, required this.scenarioId});
 
+  static String routeName = "/my_scenario_page";
+
   @override
   State<StatefulWidget> createState() => _SpeechState();
 }
