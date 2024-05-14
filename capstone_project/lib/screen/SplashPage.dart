@@ -10,13 +10,16 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  //
   @override
   void initState() {
     super.initState();
     Timer(
       const Duration(seconds: 2),
       () => Navigator.push(
-          context, MaterialPageRoute(builder: (context) => LoginPage())),
+          //context, MaterialPageRoute(builder: (context) => MainPage())),
+          context,
+          MaterialPageRoute(builder: (context) => LoginPage())),
     ) //CreateScenarioPage(scenarioId: 4, scenarioID_ID: 3, text: "s", emotion: "평범")
         ;
   }

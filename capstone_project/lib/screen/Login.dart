@@ -1,9 +1,8 @@
+import 'package:capstone_project/MainPage.dart';
 import 'package:capstone_project/model/logInDto.dart';
 import 'package:capstone_project/network/auth_service.dart';
-import 'package:capstone_project/provider/movie_scenario_provider.dart';
 import 'package:capstone_project/screen/SignUp.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -123,10 +122,12 @@ class _LoginPageState extends State<LoginPage> {
                       if (Emailinput.text.isEmpty == false &&
                           Passwordinput.text.isEmpty == false &&
                           statusCode == 201) {
-                        //context.read<MyScenarioProvider>().setScenarioId(1);
-                        context.read<MovieScenarioProvider>().setScenarioId(1);
-                        context.read<MovieScenarioProvider>().setTitle("혁명의 밤을 짧지만, 그 영광을 오래갈 것이다");
-                        Navigator.pushNamed(context, '/movie_scenario');
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    //MyScenarioPage(scenarioId: 1)));
+                                    MainPage()));
                       } else if (Emailinput.text.isEmpty == true) {
                         showSnackEmailinput(context);
                       } else if (Passwordinput.text.isEmpty == true) {

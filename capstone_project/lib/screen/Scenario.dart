@@ -1,5 +1,5 @@
+import 'package:capstone_project/services/api_service.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class Scenario extends StatefulWidget {
   const Scenario({super.key});
@@ -9,23 +9,42 @@ class Scenario extends StatefulWidget {
 }
 
 class _ScenarioState extends State<Scenario> {
+  TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.black,
-        title: Row(
-          children: [
-            Text(
-              'Capstone Speech',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 25,
+        title: Text(
+          'Capstone Speech',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 25,
+          ),
+        ),
+        actions: <Widget>[
+          GestureDetector(
+            onTap: () {
+              String text = _controller.text;
+              ApiService().postContent(text);
+              // '완료'를 클릭했을 때 수행할 작업을 여기에 추가하세요.
+              // 예를 들어, string을 post하는 함수를 호출할 수 있습니다.
+              print('완료 clicked');
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.0),
+              alignment: Alignment.center,
+              child: Text(
+                '완료',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  color: Colors.white,
+                ),
               ),
             ),
-          ],
-        ),
+          ),
+        ],
         iconTheme: IconThemeData(
           color: Colors.white,
         ),
@@ -43,6 +62,7 @@ class _ScenarioState extends State<Scenario> {
               height: 1000,
               width: 400,
               child: TextField(
+                controller: _controller,
                 style: TextStyle(
                   height: 2.0,
                   color: Colors.white,
