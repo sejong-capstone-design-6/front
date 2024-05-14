@@ -1,17 +1,20 @@
-import 'package:capstone_project/component/BasicAppBar.dart';
 import 'package:capstone_project/component/EmotionChip.dart';
+import 'package:capstone_project/component/EvaluationPageUtil.dart';
+import 'package:capstone_project/component/TranscriptPageAppBar.dart';
 import 'package:capstone_project/model/bringTranscriptDto.dart';
 import 'package:capstone_project/network/my_scenario_service.dart';
+import 'package:capstone_project/screen/BasicPracticePage.dart';
 import 'package:flutter/material.dart';
 
 class BasicEvaluationPage extends StatefulWidget {
   final String title;
   final String sentenceEmotion;
+  final String sentence;
   final int sentenceId;
   final int transcriptId;
 
-  BasicEvaluationPage(
-      this.title, this.sentenceEmotion, this.sentenceId, this.transcriptId);
+  BasicEvaluationPage(this.title, this.sentenceEmotion, this.sentence,
+      this.sentenceId, this.transcriptId);
   @override
   State<StatefulWidget> createState() => _BasicEvaluationPage();
 }
@@ -40,7 +43,7 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
         : Scaffold(
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(48.0),
-              child: BasicAppBar(widget.title),
+              child: TranscriptPageAppBar(widget.title, '/my_page'),
             ),
             body: Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
@@ -58,7 +61,9 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                       Padding(
                         padding:
                             const EdgeInsets.only(left: 16, right: 16, top: 16),
-                        child: Text('${transcriptDto.speechToText}'),
+                        child: ComparedSentence(
+                            widget.sentence.replaceAll('.', ''),
+                            transcriptDto.speechToText),
                       ),
                       SizedBox(
                         height: 8,
@@ -154,48 +159,58 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                           ],
                         ),
                       ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      transcriptDto.correctionProposal.id == 0
+                          ? SizedBox()
+                          : InkWell(
+                              onTap: () {
+                                if (transcriptDto.correctionProposal.id ==
+                                    2 | 4) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => BasicPracticePage(
+                                            id: widget.sentenceId,
+                                            title: widget.title,
+                                            text: widget.sentence,
+                                            emotion: widget.sentenceEmotion,
+                                            proposedRevision: transcriptDto
+                                                .correctionProposal.proposal,
+                                          )));
+                                } else if(transcriptDto.correctionProposal.id == 1) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => BasicPracticePage(
+                                            id: widget.sentenceId,
+                                            title: widget.title,
+                                            text: widget.sentence,
+                                            emotion: widget.sentenceEmotion,
+                                            proposedRevision: transcriptDto
+                                                .correctionProposal.proposal,
+                                            proposedEmotion: randomEmotion(),
+                                          )));
+                                }
+                              },
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.only(left: 16, right: 16),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text("연습하러가기",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w600)),
+                                    Icon(
+                                      Icons.keyboard_arrow_right,
+                                      color: Colors.white,
+                                    )
+                                  ],
+                                ),
+                              ),
+                            )
                     ],
                   ),
                 )),
           );
   }
 
-  Widget AIEmotion(String value) {
-    Color color = Colors.white;
-    if (value == "평범") {
-      color = Color(0xff6A5ACD);
-    } else if (value == "분노") {
-      color = Color.fromARGB(255, 172, 0, 0);
-    } else if (value == "웃음") {
-      color = Color(0xffFFD700);
-    } else if (value == "슬픔") {
-      color = Color.fromARGB(255, 65, 105, 225);
-    } else if (value == "놀라움") {
-      color = Color(0xff32CD32);
-    } else if (value == "두려움") {
-      color = Color(0xff8E9A30);
-    } else {
-      color = Colors.white;
-    }
-
-    return Row(
-      children: [
-        Text(
-          'AI는 ',
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
-        ),
-        Text(
-          value,
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w600, color: color),
-        ),
-        Text(
-          '의 감정을 느꼈어요!',
-          style: TextStyle(
-              fontSize: 14, fontWeight: FontWeight.w600, color: Colors.white),
-        ),
-      ],
-    );
-  }
 }

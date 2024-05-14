@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
 class CheckEvaluationDoneProvider with ChangeNotifier {
   bool isFileUploaded = false;
@@ -7,7 +6,6 @@ class CheckEvaluationDoneProvider with ChangeNotifier {
 
   void setIsFileUploaded(bool newIsFileUploaded) {
     isFileUploaded = newIsFileUploaded;
-    Logger().d('work123');
     notifyListeners();
   }
 
