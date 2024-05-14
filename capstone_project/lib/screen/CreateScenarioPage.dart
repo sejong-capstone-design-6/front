@@ -1,3 +1,4 @@
+import 'package:capstone_project/component/EmotionChip.dart';
 import 'package:capstone_project/model/createScenarioDto.dart';
 import 'package:capstone_project/model/reviseSentenceDto.dart';
 import 'package:capstone_project/network/my_scenario_service.dart';
@@ -6,16 +7,16 @@ import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:flutter/material.dart';
 
 class CreateScenarioPage extends StatefulWidget {
+  final int userId;
   final int scenarioId;
-  final int scenarioID_ID;
   final String text;
   final String emotion;
   final bool isRevise;
 
   CreateScenarioPage(
       {super.key,
+      required this.userId,
       required this.scenarioId,
-      required this.scenarioID_ID,
       required this.text,
       required this.emotion,
       required this.isRevise});
@@ -34,18 +35,21 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
 
   late List<bool> isSelected;
 
+  final _controller = TextEditingController();
+
   void initState() {
+    _controller.text=widget.text;
     if (widget.emotion == "평범") {
       isnormal = true;
-    } else if (widget.emotion == "기뻐") {
+    } else if (widget.emotion == "웃음") {
       ishappy = true;
     } else if (widget.emotion == "분노") {
       isanger = true;
-    } else if (widget.emotion == "슬퍼") {
+    } else if (widget.emotion == "슬픔") {
       issad = true;
-    } else if (widget.emotion == "놀라") {
+    } else if (widget.emotion == "놀라움") {
       issurprise = true;
-    } else if (widget.emotion == "두려워") {
+    } else if (widget.emotion == "두려움") {
       isfeared = true;
     }
     isSelected = [isnormal, ishappy, isanger, issad, issurprise, isfeared];
@@ -54,11 +58,12 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
 
   @override
   Widget build(BuildContext context) {
+    int _userId=widget.userId;
     int _scenarioID = widget.scenarioId;
     String _emotion = widget.emotion;
     double weth = MediaQuery.of(context).size.width;
     double hight = MediaQuery.of(context).size.height;
-    final _controller = TextEditingController(text: widget.text);
+    
 
     return Scaffold(
       appBar: PreferredSize(
@@ -85,15 +90,15 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
                   if (isnormal == true) {
                     _emotion = "평범";
                   } else if (ishappy == true) {
-                    _emotion = "기뻐";
+                    _emotion = "웃음";
                   } else if (isanger == true) {
                     _emotion = "분노";
                   } else if (issad == true) {
-                    _emotion = "슬퍼";
+                    _emotion = "슬픔";
                   } else if (issurprise == true) {
-                    _emotion = "놀라";
+                    _emotion = "놀라움";
                   } else if (isfeared == true) {
-                    _emotion = "무서워";
+                    _emotion = "두려움";
                   }
 
                   dynamic statusCode;
@@ -105,23 +110,21 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  MyScenarioPage(scenarioId: _scenarioID)));
+                                  MyScenarioPage(scenarioId: _userId)));
                     } else {
                       showSnackDeny(context);
                     }
                   } else {
                     dynamic response =
                         await reviseSentenceService.ReviseSentence(
-                            ReviseSentenceDto(text));
-                    dynamic s = response.body;
-                    print("$s");
-                    if (response.statusCode == 201) {
+                            ReviseSentenceDto(_scenarioID,text,_emotion));
+                    if (response.statusCode == 200) {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  MyScenarioPage(scenarioId: _scenarioID)));
-                    } else {
+                                  MyScenarioPage(scenarioId: _userId)));
+                    } else {    
                       showSnackDeny(context);
                     }
                   }
@@ -188,90 +191,42 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
                       padding: EdgeInsets.symmetric(horizontal: 7), //간격=16
                       child: Row(
                         children: [
-                          Text(
-                            "평범",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Icon(
-                            Icons.circle,
-                            color: Colors.white,
-                            size: 16,
-                          ),
+                          EmotionChip("평범")
                         ],
                       )),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 7),
                       child: Row(
                         children: [
-                          Text(
-                            "기뻐",
-                            style: TextStyle(color: Colors.red),
-                          ),
-                          Icon(
-                            Icons.circle,
-                            color: Colors.red,
-                            size: 16,
-                          ),
+                          EmotionChip("웃음")
                         ],
                       )),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 7), //간격=16
                       child: Row(
                         children: [
-                          Text(
-                            "분노",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Icon(
-                            Icons.circle,
-                            color: Colors.white,
-                            size: 16,
-                          ),
+                          EmotionChip("분노")
                         ],
                       )),
                   Padding(
                       padding: EdgeInsets.symmetric(horizontal: 7), //간격=16
                       child: Row(
                         children: [
-                          Text(
-                            "슬퍼",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Icon(
-                            Icons.circle,
-                            color: Colors.white,
-                            size: 16,
-                          ),
+                          EmotionChip("슬픔")
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 7), //간격=16
+                      padding: EdgeInsets.symmetric(horizontal: 1), //간격=16
                       child: Row(
                         children: [
-                          Text(
-                            "놀라",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Icon(
-                            Icons.circle,
-                            color: Colors.white,
-                            size: 16,
-                          ),
+                          EmotionChip("놀라움")
                         ],
                       )),
                   Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 7), //간격=16
+                      padding: EdgeInsets.symmetric(horizontal: 1), //간격=16
                       child: Row(
                         children: [
-                          Text(
-                            "두려워",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          Icon(
-                            Icons.circle,
-                            color: Colors.white,
-                            size: 16,
-                          ),
+                          EmotionChip("두려움")
                         ],
                       )),
                 ],

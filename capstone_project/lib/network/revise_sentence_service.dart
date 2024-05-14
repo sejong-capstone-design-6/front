@@ -10,8 +10,16 @@ class ReviseSentenceService{
 
   Future<dynamic> ReviseSentence(ReviseSentenceDto dto) async{
     try{
-      final url= Uri.parse("$scenarioUpdateUrl/sentences/revise");      
-      final response = await http.post(url, body: jsonEncode(dto.toJson()),headers: {"Content-Type":"application/json"});
+      int updateScenarioId=dto.scenarioId;
+      final url= Uri.parse("$scenarioUpdateUrl/sentences/$updateScenarioId");      
+      String a=url.toString();
+      String b=dto.text;
+      String c=dto.emotion;
+      print("$a    $b         $c              $updateScenarioId     $url");
+      final response = await http.put(url, body: jsonEncode(dto.toJson()),headers: {"Content-Type":"application/json"});
+      Logger().d("$response");
+      var o=response.statusCode;
+      print("$o");
       return response; 
     }
     catch (e){
