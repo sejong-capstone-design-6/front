@@ -1,6 +1,6 @@
 import 'package:capstone_project/component/BasicAppBar.dart';
+import 'package:capstone_project/component/MovieRecorderModalBottomSheet.dart';
 import 'package:capstone_project/component/PropsoedEmotionLabel.dart';
-import 'package:capstone_project/component/WaitingModal.dart';
 import 'package:capstone_project/model/bringScenarioSentenceDto.dart';
 import 'package:flutter/material.dart';
 
@@ -40,7 +40,7 @@ class _MoviePracticePage2 extends State<MoviePracticePage2> {
       barrierColor: Colors.transparent,
       isDismissible: false,
       builder: (context) {
-        return WaitingModal();
+        return MovieRecorderModalBottomSheet(widget.title, widget.id, widget.sentences);
       },
     );
   }
