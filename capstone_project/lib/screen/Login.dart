@@ -125,7 +125,7 @@ class _LoginPageState extends State<LoginPage> {
                           statusCode == 201) {
                         //context.read<MyScenarioProvider>().setScenarioId(1);
                         context.read<MovieScenarioProvider>().setScenarioId(1);
-                        context.read<MovieScenarioProvider>().setTitle("tet");
+                        context.read<MovieScenarioProvider>().setTitle("혁명의 밤을 짧지만, 그 영광을 오래갈 것이다");
                         Navigator.pushNamed(context, '/movie_scenario');
                       } else if (Emailinput.text.isEmpty == true) {
                         showSnackEmailinput(context);

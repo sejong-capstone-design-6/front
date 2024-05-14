@@ -12,18 +12,18 @@ import 'package:logger/logger.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class RecorderModalBottomSheet extends StatefulWidget {
+class BasicRecorderModalBottomSheet extends StatefulWidget {
   final String title;
   final String sentenceEmotion;
   final int sentenceId;
   final String sentence;
 
-  RecorderModalBottomSheet(this.title, this.sentence, this.sentenceEmotion, this.sentenceId);
+  BasicRecorderModalBottomSheet(this.title, this.sentence, this.sentenceEmotion, this.sentenceId);
   @override
   State<StatefulWidget> createState() => _RecorderModalBottomSheet();
 }
 
-class _RecorderModalBottomSheet extends State<RecorderModalBottomSheet> {
+class _RecorderModalBottomSheet extends State<BasicRecorderModalBottomSheet> {
   FlutterSoundRecorder? _audioRecorder;
   bool _isRecording = false;
   late String _filePath;
