@@ -121,12 +121,6 @@ class _ScenarioTabState extends State<ScenarioTab> {
     });
   }
 
-  void addScenario(ScenarioModel scenario) {
-    setState(() {
-      scenarioss.scenarios.add(scenario);
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -208,17 +202,7 @@ class _ScenarioTabState extends State<ScenarioTab> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    //final scenarioUploadRes =
-                    //await ApiService().postScenario(mode, title);
-                    //setState(() {
-                    ApiService().postScenario(mode, title).then((value) {
-                      addScenario(ScenarioModel(
-                        id: value.scenarioId,
-                        title: title,
-                        type: mode,
-                      ));
-                      //});
-                    });
+                    ApiService().postScenario(mode, title);
                     await fetchScenarios();
                     Navigator.of(context).pop();
                     /*Navigator.push(
@@ -228,42 +212,6 @@ class _ScenarioTabState extends State<ScenarioTab> {
                             MyScenarioPage(scenarioId: authSercive.userId!)));*/
                   },
                   child: const Text('확인'),
-                  /*
-                  onPressed: () async {
-                    final scenarioUploadRes =
-                        await ApiService().postScenario(mode, title);
-                    if (scenarioUploadRes != null) {
-                      final newScenario = ScenarioModel(
-                        id: scenarioUploadRes.scenarioId,
-                        title: title,
-                        type: mode,
-                      );
-                      addScenario(newScenario);
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: const Text('확인'),*/ /*
-                  onPressed: () async {
-                    try {
-                      final scenarioUploadRes =
-                          await ApiService().postScenario(mode, title);
-                      if (scenarioUploadRes != null) {
-                        final newScenario = ScenarioModel(
-                          id: scenarioUploadRes.scenarioId,
-                          title: title,
-                          type: mode,
-                        );
-                        setState(() {
-                          addScenario(newScenario);
-                        });
-                        Navigator.of(context).pop();
-                      }
-                    } catch (e) {
-                      // 오류 처리: 사용자에게 오류 메시지 표시 등
-                      print('Error: $e');
-                    }
-                  },
-                  child: const Text('확인'),*/
                 ),
               ],
             );
