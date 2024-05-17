@@ -9,7 +9,8 @@ class ApiService {
   final String contentApi = 'sentences';
   int? _userId = authSercive.userId;
 
-  void postScenario(String mode, String title) async {
+  Future postScenario(String mode, String title) async {
+    int scenarioId;
     Map<String, dynamic> data = {
       'userId': _userId,
       'type': mode,
@@ -27,14 +28,12 @@ class ApiService {
       body: requestBody,
     );
 
-    int scenarioId;
-
     if (response.statusCode == 201) {
       print('POST Success!');
       print('응답: ${response.body}');
       Map<String, dynamic> jsonResponse = json.decode(response.body);
       scenarioId = jsonResponse['scenarioId'];
-      return;
+      return; // scenarioId;
     } else {
       print('POST Failed..: ${response.statusCode}');
       throw Error();
@@ -67,18 +66,19 @@ class ApiService {
     }
   }
 
-  Future getMyScenarios() async {
+  //Future<List<ScenarioModel>> getMyScenarios() async {
+  Future<ScenarioList> getMyScenarios() async {
     String uid = _userId.toString();
-    final url = Uri.parse('$baseUrl/$scenarioApi?uid={$uid}');
+    final url = Uri.parse('$baseUrl/$scenarioApi')
+        .replace(queryParameters: {'uid': uid});
     final response = await http.get(url);
-    List<dynamic> jsonResponse;
+
+    Map<String, dynamic> jsonResponse;
     List<ScenarioModel> scenarios;
     if (response.statusCode == 200) {
       print(response.body);
       jsonResponse = json.decode(response.body);
-      scenarios =
-          jsonResponse.map((data) => ScenarioModel.fromJson(data)).toList();
-      return;
+      return ScenarioList.fromJson(jsonResponse);
     } else {
       print(response.statusCode);
       throw Error();

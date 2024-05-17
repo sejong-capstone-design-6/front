@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class CreateScenarioPage extends StatefulWidget {
   final int scenarioId;
-  final int scenarioID_ID;
+  final int userId;
   final String text;
   final String emotion;
   final bool isRevise;
@@ -15,7 +15,7 @@ class CreateScenarioPage extends StatefulWidget {
   CreateScenarioPage(
       {super.key,
       required this.scenarioId,
-      required this.scenarioID_ID,
+      required this.userId,
       required this.text,
       required this.emotion,
       required this.isRevise});
