@@ -86,7 +86,8 @@ class MyScenarioService {
     }
   }
 
-  Future<BringTranscriptIdDto> uploadVoice(int sentenceId, String filePath) async {
+  Future<BringTranscriptIdDto> uploadVoice(
+      int sentenceId, String filePath) async {
     try {
       var dio = Dio();
       var formData =

@@ -1,3 +1,8 @@
+import 'package:capstone_project/component/ScenarioModel.dart';
+import 'package:capstone_project/network/auth_service.dart';
+import 'package:capstone_project/provider/data_provider.dart';
+import 'package:capstone_project/screen/CreateScenarioPage.dart';
+import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:capstone_project/screen/Scenario.dart';
 import 'package:capstone_project/services/api_service.dart';
 import 'package:capstone_project/component/MovieCard.dart';
@@ -21,6 +26,7 @@ class _TabBarScreenState extends State<TabBarScreen>
     animationDuration: const Duration(milliseconds: 800),
   );
   List<String> scenarios = ['Scenario 1', 'Scenario 2', 'Scenario 3'];
+
   @override
   void dispose() {
     tabController.dispose();
@@ -40,7 +46,7 @@ class _TabBarScreenState extends State<TabBarScreen>
               child: TabBarView(
                 controller: tabController,
                 children: [
-                  ScenarioTab(scenarios: scenarios),
+                  ScenarioTab(),
                   ListView.builder(
                       itemCount: 1,
                       itemBuilder: (context, idx) {
@@ -90,15 +96,37 @@ class _TabBarScreenState extends State<TabBarScreen>
 }
 
 class ScenarioTab extends StatefulWidget {
-  final List<String> scenarios;
-
-  const ScenarioTab({super.key, required this.scenarios});
+  const ScenarioTab({super.key});
 
   @override
   _ScenarioTabState createState() => _ScenarioTabState();
 }
 
 class _ScenarioTabState extends State<ScenarioTab> {
+  late ScenarioList scenarioss;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchScenarios();
+  }
+
+  Future<void> fetchScenarios() async {
+    ScenarioList fetchedScenarios = await ApiService().getMyScenarios();
+
+    setState(() {
+      scenarioss = fetchedScenarios;
+      isLoading = false;
+    });
+  }
+
+  void addScenario(ScenarioModel scenario) {
+    setState(() {
+      scenarioss.scenarios.add(scenario);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -112,87 +140,134 @@ class _ScenarioTabState extends State<ScenarioTab> {
         },
         child: const Icon(Icons.add),
       ),
-      body: GridView.builder(
-        itemCount: widget.scenarios.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-        ),
-        itemBuilder: (BuildContext context, int index) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 3.0),
-            child: Card(
-              color: Colors.grey.withOpacity(0.2),
-              child: ListTile(
-                title: Text(
-                  widget.scenarios[index],
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
-                    color: Colors.white,
-                  ),
-                ),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : GridView.builder(
+              itemCount: scenarioss.scenarios.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
               ),
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                  child: ScenarioModel(
+                    id: scenarioss.scenarios[index].id,
+                    title: scenarioss.scenarios[index].title,
+                    type: scenarioss.scenarios[index].type,
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 
   void _showAddScenarioModal(BuildContext context) {
     String mode = '연기'; // 초기 선택값
     String title = ''; // 초기 제목값
-
+    var scenarioId;
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Add Scenario'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              DropdownButtonFormField<String>(
-                value: mode,
-                items: ['연기', '스피치'].map((String value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(value),
-                  );
-                }).toList(),
-                onChanged: (String? value) {
-                  setState(() {
-                    mode = value!;
-                  });
-                },
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: const Text('Add Scenario'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  DropdownButtonFormField<String>(
+                    value: mode,
+                    items: ['연기', '스피치'].map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        mode = value!;
+                      });
+                    },
+                  ),
+                  TextField(
+                    onChanged: (value) {
+                      setState(() {
+                        title = value;
+                      });
+                    },
+                    decoration: const InputDecoration(labelText: '제목'),
+                  ),
+                ],
               ),
-              TextField(
-                onChanged: (value) {
-                  title = value;
-                },
-                decoration: const InputDecoration(labelText: '제목'),
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('취소'),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  widget.scenarios.add(title);
-                  ApiService().postScenario(mode, title);
-                });
-                Navigator.of(context).pop();
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => const Scenario()));
-              },
-              child: const Text('확인'),
-            ),
-          ],
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('취소'),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    //final scenarioUploadRes =
+                    //await ApiService().postScenario(mode, title);
+                    //setState(() {
+                    ApiService().postScenario(mode, title).then((value) {
+                      addScenario(ScenarioModel(
+                        id: value.scenarioId,
+                        title: title,
+                        type: mode,
+                      ));
+                      //});
+                    });
+                    await fetchScenarios();
+                    Navigator.of(context).pop();
+                    /*Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            MyScenarioPage(scenarioId: authSercive.userId!)));*/
+                  },
+                  child: const Text('확인'),
+                  /*
+                  onPressed: () async {
+                    final scenarioUploadRes =
+                        await ApiService().postScenario(mode, title);
+                    if (scenarioUploadRes != null) {
+                      final newScenario = ScenarioModel(
+                        id: scenarioUploadRes.scenarioId,
+                        title: title,
+                        type: mode,
+                      );
+                      addScenario(newScenario);
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: const Text('확인'),*/ /*
+                  onPressed: () async {
+                    try {
+                      final scenarioUploadRes =
+                          await ApiService().postScenario(mode, title);
+                      if (scenarioUploadRes != null) {
+                        final newScenario = ScenarioModel(
+                          id: scenarioUploadRes.scenarioId,
+                          title: title,
+                          type: mode,
+                        );
+                        setState(() {
+                          addScenario(newScenario);
+                        });
+                        Navigator.of(context).pop();
+                      }
+                    } catch (e) {
+                      // 오류 처리: 사용자에게 오류 메시지 표시 등
+                      print('Error: $e');
+                    }
+                  },
+                  child: const Text('확인'),*/
+                ),
+              ],
+            );
+          },
         );
       },
     );

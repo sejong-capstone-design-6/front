@@ -9,6 +9,7 @@ class Scenario extends StatefulWidget {
 }
 
 class _ScenarioState extends State<Scenario> {
+  String text = '';
   TextEditingController _controller = TextEditingController();
   @override
   Widget build(BuildContext context) {
@@ -26,10 +27,8 @@ class _ScenarioState extends State<Scenario> {
         actions: <Widget>[
           GestureDetector(
             onTap: () {
-              String text = _controller.text;
+              text = _controller.text;
               ApiService().postContent(text);
-              // '완료'를 클릭했을 때 수행할 작업을 여기에 추가하세요.
-              // 예를 들어, string을 post하는 함수를 호출할 수 있습니다.
               print('완료 clicked');
             },
             child: Container(
@@ -65,7 +64,7 @@ class _ScenarioState extends State<Scenario> {
                 controller: _controller,
                 style: TextStyle(
                   height: 2.0,
-                  color: Colors.white,
+                  color: Colors.amber,
                 ),
                 decoration: InputDecoration(
                   border: InputBorder.none,

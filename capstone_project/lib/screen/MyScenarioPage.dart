@@ -69,6 +69,7 @@ class _SpeechState extends State<MyScenarioPage> {
                                   text: "",
                                   emotion: "",
                                   isRevise: false,
+                                  userId: 1,
                                 )));
                   } else if (mode == "스피치") {
                     Navigator.push(
