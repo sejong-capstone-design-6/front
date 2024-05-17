@@ -43,7 +43,7 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
         : Scaffold(
             appBar: PreferredSize(
               preferredSize: Size.fromHeight(48.0),
-              child: TranscriptPageAppBar(widget.title, '/my_page'),
+              child: TranscriptPageAppBar(widget.title, '/my_scenario'),
             ),
             body: Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
