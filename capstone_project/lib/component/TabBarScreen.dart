@@ -207,9 +207,9 @@ class _ScenarioTabState extends State<ScenarioTab> {
                   child: const Text('취소'),
                 ),
                 TextButton(
-                  /*
                   onPressed: () async {
-                    final scenarioUploadRes = await ApiService().postScenario(mode, title);
+                    //final scenarioUploadRes =
+                    //await ApiService().postScenario(mode, title);
                     //setState(() {
                     ApiService().postScenario(mode, title).then((value) {
                       addScenario(ScenarioModel(
@@ -219,6 +219,7 @@ class _ScenarioTabState extends State<ScenarioTab> {
                       ));
                       //});
                     });
+                    await fetchScenarios();
                     Navigator.of(context).pop();
                     /*Navigator.push(
                     context,
@@ -227,7 +228,7 @@ class _ScenarioTabState extends State<ScenarioTab> {
                             MyScenarioPage(scenarioId: authSercive.userId!)));*/
                   },
                   child: const Text('확인'),
-                */ /*
+                  /*
                   onPressed: () async {
                     final scenarioUploadRes =
                         await ApiService().postScenario(mode, title);
@@ -241,7 +242,7 @@ class _ScenarioTabState extends State<ScenarioTab> {
                       Navigator.of(context).pop();
                     }
                   },
-                  child: const Text('확인'),*/
+                  child: const Text('확인'),*/ /*
                   onPressed: () async {
                     try {
                       final scenarioUploadRes =
@@ -262,7 +263,7 @@ class _ScenarioTabState extends State<ScenarioTab> {
                       print('Error: $e');
                     }
                   },
-                  child: const Text('확인'),
+                  child: const Text('확인'),*/
                 ),
               ],
             );
