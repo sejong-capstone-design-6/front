@@ -17,7 +17,7 @@ class MyScenarioPage extends StatefulWidget {
 }
 
 class _SpeechState extends State<MyScenarioPage> {
-  bool scenarioMode = true;
+  String mode = "연기"; //메인화면이나 서버에서 받아와야 된다.
   late BringScenarioDto scenarioCard;
   bool isLoading = true;
 
@@ -44,11 +44,13 @@ class _SpeechState extends State<MyScenarioPage> {
                 itemCount: scenarioCard.sentences.length,
                 itemBuilder: (BuildContext context, int index) {
                   return EmotionCard(
+                      widget.scenarioId,
                       scenarioCard.sentences[index].id,
                       scenarioCard.sentences[index].isSuccess,
                       scenarioCard.sentences[index].sentence,
                       scenarioCard.sentences[index].emotion,
-                      scenarioCard.title);
+                      scenarioCard.title,
+                      mode);
                 }),
             floatingActionButton: Container(
               height: 45.0,
@@ -57,22 +59,24 @@ class _SpeechState extends State<MyScenarioPage> {
                   child: FloatingActionButton(
                 shape: CircleBorder(),
                 onPressed: () {
-                  if (scenarioMode == true) {
+                  if (mode == "연기") {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => CreateScenarioPage(
+                                  userId: scenarioCard.id,
                                   scenarioId: widget.scenarioId,
                                   text: "",
                                   emotion: "",
                                   isRevise: false,
                                   userId: 1,
                                 )));
-                  } else if (scenarioMode == false) {
+                  } else if (mode == "스피치") {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => CreateSpeechPage(
+                                  userId: scenarioCard.id,
                                   scenarioId: widget.scenarioId,
                                   text: "",
                                   emotion: "",
