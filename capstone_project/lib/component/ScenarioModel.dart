@@ -1,4 +1,3 @@
-import 'package:capstone_project/screen/Scenario.dart';
 import 'package:flutter/material.dart';
 
 class ScenarioModel extends StatelessWidget {
