@@ -1,9 +1,5 @@
 import 'package:capstone_project/component/ScenarioModel.dart';
-import 'package:capstone_project/network/auth_service.dart';
-import 'package:capstone_project/provider/data_provider.dart';
-import 'package:capstone_project/screen/CreateScenarioPage.dart';
 import 'package:capstone_project/screen/MyScenarioPage.dart';
-import 'package:capstone_project/screen/Scenario.dart';
 import 'package:capstone_project/services/api_service.dart';
 import 'package:capstone_project/component/MovieCard.dart';
 import 'package:flutter/material.dart';
@@ -158,7 +154,6 @@ class _ScenarioTabState extends State<ScenarioTab> {
   void _showAddScenarioModal(BuildContext context) {
     String mode = '연기'; // 초기 선택값
     String title = ''; // 초기 제목값
-    var scenarioId;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -202,14 +197,14 @@ class _ScenarioTabState extends State<ScenarioTab> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    ApiService().postScenario(mode, title);
+                    int scenarioId = await ApiService().postScenario(mode, title);
                     await fetchScenarios();
                     Navigator.of(context).pop();
-                    /*Navigator.push(
+                    Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) =>
-                            MyScenarioPage(scenarioId: authSercive.userId!)));*/
+                            MyScenarioPage(scenarioId: scenarioId)));
                   },
                   child: const Text('확인'),
                 ),
