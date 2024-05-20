@@ -1,10 +1,21 @@
-import 'dart:async';
-
+import 'package:capstone_project/provider/movie_scenario_provider.dart';
+import 'package:capstone_project/screen/MoviePracticePage1.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 class MovieCard extends StatefulWidget {
-  const MovieCard({super.key});
+  final int id;
+  final String title;
+  final String movie;
+  final String url;
+
+  MovieCard(
+      {super.key,
+      required this.id,
+      required this.title,
+      required this.movie,
+      required this.url});
 
   @override
   State<MovieCard> createState() => _MovieCardState();
@@ -29,67 +40,62 @@ class _MovieCardState extends State<MovieCard> {
       });
   }
 
-  bool _onTouch = false;
-  Timer? _timer;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 250,
-      child: Container(
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: Center(
-            child: _controller.value.isInitialized
-                ? AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        VideoPlayer(_controller),
-                        ClosedCaption(text: null),
-                        VideoProgressIndicator(
-                          _controller,
-                          allowScrubbing: true,
-                          colors: VideoProgressColors(
-                            playedColor: Colors.red,
+    return Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: GestureDetector(
+          onTap: () {
+            context.read<MovieScenarioProvider>().setScenarioId(widget.id);
+            context.read<MovieScenarioProvider>().setTitle(widget.title);
+            context.read<MovieScenarioProvider>().SetUrl(widget.url);
+            
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => MoviePracticePage1(
+                          id: widget.id,
+                          title: widget.title,
+                          url: widget.url
+                        )));
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.maxFinite,
+                child: Center(
+                  child: _controller.value.isInitialized
+                      ? AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          child: Stack(
+                            alignment: Alignment.bottomCenter,
+                            children: [
+                              VideoPlayer(_controller),
+                            ],
                           ),
-                        ),
-                        Visibility(
-                          visible: _onTouch,
-                          child: Container(
-                            color: Colors.grey.withOpacity(0.5),
-                            alignment: Alignment.center,
-                            child: FloatingActionButton(onPressed: () {
-                              _timer?.cancel();
-                              setState(
-                                () {
-                                  _controller.value.isPlaying
-                                      ? _controller.pause()
-                                      : _controller.play();
-                                },
-                              );
-                            }),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : Container(),
+                        )
+                      : Container(),
+                ),
+              ),
+              SizedBox(
+                height: 8,
+              ),
+              Text(
+                widget.title,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+              SizedBox(
+                height: 2,
+              ),
+              Text(
+                widget.movie,
+                style: TextStyle(fontSize: 12),
+                overflow: TextOverflow.ellipsis,
+              )
+            ],
           ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                _controller.value.isPlaying
-                    ? _controller.pause()
-                    : _controller.play();
-              });
-            },
-            child: Icon(
-              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-            ),
-          ),
-        ),
-      ),
-    );
+        ));
   }
 }

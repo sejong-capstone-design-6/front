@@ -75,7 +75,6 @@ class ApiService {
 
     Map<String, dynamic> jsonResponse;
     if (response.statusCode == 200) {
-      print(response.body);
       jsonResponse = json.decode(response.body);
       return ScenarioList.fromJson(jsonResponse);
     } else {

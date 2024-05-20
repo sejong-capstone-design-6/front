@@ -70,6 +70,8 @@ class _ScenarioModelState extends State<ScenarioModel> {
                       if (widget.sentence != null)
                         Text(
                           widget.sentence!,
+                          maxLines: 7,
+                          overflow: TextOverflow.ellipsis,
                           style:
                               TextStyle(fontSize: 12, color: Color(0xffC4C4C4)),
                         ),

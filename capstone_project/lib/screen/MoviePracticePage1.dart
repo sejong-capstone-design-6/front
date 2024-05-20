@@ -1,4 +1,5 @@
 import 'package:capstone_project/component/BasicAppBar.dart';
+import 'package:capstone_project/component/MovieVideoPlayer.dart';
 import 'package:capstone_project/model/bringScenarioSentenceDto.dart';
 import 'package:capstone_project/network/movie_scenario_service.dart';
 import 'package:capstone_project/screen/MoviePracticePage2.dart';
@@ -7,8 +8,10 @@ import 'package:flutter/material.dart';
 class MoviePracticePage1 extends StatefulWidget {
   final int id;
   final String title;
+  final String url;
 
-  MoviePracticePage1({super.key, required this.id, required this.title});
+  MoviePracticePage1(
+      {super.key, required this.id, required this.title, required this.url});
 
   @override
   State<StatefulWidget> createState() => _MoviePracticePage1();
@@ -46,10 +49,7 @@ class _MoviePracticePage1 extends State<MoviePracticePage1> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Container(
-                    height: 200,
-                    color: Colors.black,
-                  ),
+                  MovieVideoPlayer(url: widget.url),
                   SizedBox(height: 14),
                   Expanded(
                     // Using Expanded to fill remaining space

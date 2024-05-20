@@ -1,4 +1,4 @@
-import 'package:capstone_project/MainPage.dart';
+import 'package:capstone_project/screen/MainPage.dart';
 import 'package:capstone_project/model/logInDto.dart';
 import 'package:capstone_project/network/auth_service.dart';
 import 'package:capstone_project/screen/SignUp.dart';

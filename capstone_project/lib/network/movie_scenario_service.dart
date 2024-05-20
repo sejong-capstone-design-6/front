@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:capstone_project/model/bringMovieDto.dart';
 import 'package:capstone_project/model/bringMovieTranscriptDto.dart';
 import 'package:capstone_project/model/bringScenarioSentenceDto.dart';
 import 'package:capstone_project/model/bringTranscriptIdDto.dart';
@@ -14,6 +15,23 @@ class MovieScenarioService {
   String movieScenarioUrl = '$curServerUrl/movie-scenarios';
 
   MovieScenarioService();
+
+  Future<BringMovieDto> bringScenario() async {
+    try {
+      final url = Uri.parse(movieScenarioUrl);
+      final response = await http.get(url);
+
+      if(response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        return BringMovieDto.fromJson(jsonData);
+      } else {
+        throw Exception(response.statusCode);
+      }
+    } catch(e) {
+      Logger().e(e);
+      throw Exception(e);
+    }
+  }
 
   Future<BringScenarioSentenceDto> bringScenarioSentence(int scenarioId) async {
     try {
