@@ -143,6 +143,7 @@ class _ScenarioTabState extends State<ScenarioTab> {
                   child: ScenarioModel(
                     id: scenarioss.scenarios[index].id,
                     title: scenarioss.scenarios[index].title,
+                    sentence: scenarioss.scenarios[index].sentence,
                     type: scenarioss.scenarios[index].type,
                   ),
                 );
@@ -197,14 +198,15 @@ class _ScenarioTabState extends State<ScenarioTab> {
                 ),
                 TextButton(
                   onPressed: () async {
-                    int scenarioId = await ApiService().postScenario(mode, title);
+                    int scenarioId =
+                        await ApiService().postScenario(mode, title);
                     await fetchScenarios();
                     Navigator.of(context).pop();
                     Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            MyScenarioPage(scenarioId: scenarioId)));
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                MyScenarioPage(scenarioId: scenarioId)));
                   },
                   child: const Text('확인'),
                 ),

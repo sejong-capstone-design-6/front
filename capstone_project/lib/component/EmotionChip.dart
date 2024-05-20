@@ -67,7 +67,19 @@ Widget EmotionLabel(String value) {
           color: Color.fromARGB(255, 172, 0, 0),
           fontWeight: FontWeight.bold),
     );
-  }else {
+  } else if (value == "스피치") {
+    return Text(
+      value,
+      style: TextStyle(
+          fontSize: 12, color: Color(0x4169E1), fontWeight: FontWeight.bold),
+    );
+  } else if (value == "연기") {
+    return Text(
+      value,
+      style: TextStyle(
+          fontSize: 12, color: Colors.purple, fontWeight: FontWeight.bold),
+    );
+  } else {
     return Text("");
   }
 }
@@ -107,6 +119,18 @@ Widget EmotionIcon(String value) {
     return Icon(
       Icons.circle,
       color: Color(0xff8E9A30),
+      size: 16,
+    );
+  } else if (value == "스피치") {
+    return Icon(
+      Icons.circle,
+      color: Color(0x4169E1),
+      size: 16,
+    );
+  } else if (value == "연기") {
+    return Icon(
+      Icons.circle,
+      color: Colors.purple,
       size: 16,
     );
   } else {
