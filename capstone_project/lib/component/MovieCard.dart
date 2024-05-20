@@ -1,10 +1,18 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class MovieCard extends StatefulWidget {
-  const MovieCard({super.key});
+  final int id;
+  final String title;
+  final String movie;
+  final String url;
+
+  MovieCard(
+      {super.key,
+      required this.id,
+      required this.title,
+      required this.movie,
+      required this.url});
 
   @override
   State<MovieCard> createState() => _MovieCardState();
@@ -29,66 +37,36 @@ class _MovieCardState extends State<MovieCard> {
       });
   }
 
-  bool _onTouch = false;
-  Timer? _timer;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 250,
-      child: Container(
-        child: Scaffold(
-          backgroundColor: Colors.black,
-          body: Center(
-            child: _controller.value.isInitialized
-                ? AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: Stack(
-                      alignment: Alignment.bottomCenter,
-                      children: [
-                        VideoPlayer(_controller),
-                        ClosedCaption(text: null),
-                        VideoProgressIndicator(
-                          _controller,
-                          allowScrubbing: true,
-                          colors: VideoProgressColors(
-                            playedColor: Colors.red,
-                          ),
-                        ),
-                        Visibility(
-                          visible: _onTouch,
-                          child: Container(
-                            color: Colors.grey.withOpacity(0.5),
-                            alignment: Alignment.center,
-                            child: FloatingActionButton(onPressed: () {
-                              _timer?.cancel();
-                              setState(
-                                () {
-                                  _controller.value.isPlaying
-                                      ? _controller.pause()
-                                      : _controller.play();
-                                },
-                              );
-                            }),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                : Container(),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              setState(() {
-                _controller.value.isPlaying
-                    ? _controller.pause()
-                    : _controller.play();
-              });
-            },
-            child: Icon(
-              _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            width: double.maxFinite,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(20)),
+            child: Center(
+              child: _controller.value.isInitialized
+                  ? AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          VideoPlayer(_controller),
+                          
+                        ],
+                      ),
+                    )
+                  : Container(),
             ),
           ),
-        ),
+          SizedBox(height: 8,),
+          Text(widget.title, overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),),
+          SizedBox(height: 2,),
+          Text(widget.movie, style: TextStyle(fontSize: 12), overflow: TextOverflow.ellipsis,)
+        ],
       ),
     );
   }

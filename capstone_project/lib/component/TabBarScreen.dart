@@ -1,4 +1,6 @@
 import 'package:capstone_project/component/ScenarioModel.dart';
+import 'package:capstone_project/model/bringMovieDto.dart';
+import 'package:capstone_project/network/movie_scenario_service.dart';
 import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:capstone_project/services/api_service.dart';
 import 'package:capstone_project/component/MovieCard.dart';
@@ -31,30 +33,21 @@ class _TabBarScreenState extends State<TabBarScreen>
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 576,
-      child: Scaffold(
-        backgroundColor: Colors.black,
-        body: Column(
-          children: [
-            _tabBar(),
-            Expanded(
-              child: TabBarView(
-                controller: tabController,
-                children: [
-                  ScenarioTab(),
-                  ListView.builder(
-                      itemCount: 1,
-                      itemBuilder: (context, idx) {
-                        return MovieCard();
-                      }),
-                ],
-              ),
+    return Expanded(
+        child: Scaffold(
+      backgroundColor: Colors.black,
+      body: Column(
+        children: [
+          _tabBar(),
+          Expanded(
+            child: TabBarView(
+              controller: tabController,
+              children: [ScenarioTab(), MovieTab()],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-    );
+    ));
   }
 
   Widget _tabBar() {
@@ -88,6 +81,52 @@ class _TabBarScreenState extends State<TabBarScreen>
         ),
       ],
     );
+  }
+}
+
+class MovieTab extends StatefulWidget {
+  const MovieTab({super.key});
+
+  @override
+  _MovieTab createState() => _MovieTab();
+}
+
+class _MovieTab extends State<MovieTab> {
+  late BringMovieDto movies;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchMovies();
+  }
+
+  Future<void> fetchMovies() async {
+    BringMovieDto dto = await movieScenarioService.bringScenario();
+
+    setState(() {
+      movies = dto;
+      isLoading = false;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : ListView.builder(
+                itemCount: movies.scenarios.length,
+                itemBuilder: (context, index) {
+                  return MovieCard(
+                    id: movies.scenarios[index].id,
+                    title: movies.scenarios[index].title,
+                    movie: movies.scenarios[index].movie,
+                    url: movies.scenarios[index].thumbnailUrl,
+                  );
+                }));
   }
 }
 
@@ -161,25 +200,7 @@ class _ScenarioTabState extends State<ScenarioTab> {
                       ],
                     ),
                   );
-                }) /*
-          GridView.builder(
-              itemCount: scenarioss.scenarios.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-              ),
-              itemBuilder: (BuildContext context, int index) {
-                return Padding(
-                  padding: const https://dart.dev/diagnostics/extra_positional_arguments_could_be_namedEdgeInsets.symmetric(horizontal: 3.0),
-                  child: ScenarioModel(
-                    id: scenarioss.scenarios[index].id,
-                    title: scenarioss.scenarios[index].title,
-                    sentence: scenarioss.scenarios[index].sentence,
-                    type: scenarioss.scenarios[index].type,
-                  ),
-                );
-              },
-            ),*/
-        );
+                }));
   }
 
   void _showAddScenarioModal(BuildContext context) {
