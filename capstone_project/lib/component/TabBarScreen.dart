@@ -23,7 +23,6 @@ class _TabBarScreenState extends State<TabBarScreen>
     /// 탭 변경 애니메이션 시간
     animationDuration: const Duration(milliseconds: 800),
   );
-  List<String> scenarios = ['Scenario 1', 'Scenario 2', 'Scenario 3'];
 
   @override
   void dispose() {
@@ -71,12 +70,12 @@ class _TabBarScreenState extends State<TabBarScreen>
           ],
         ),
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
           child: SearchBar(
             hintText: 'Search',
-            constraints: BoxConstraints(minHeight: 50),
-            leading: Icon(Icons.search),
-            backgroundColor: MaterialStatePropertyAll(Colors.grey),
+            constraints: BoxConstraints(minHeight: 36),
+            leading: Icon(Icons.search, color: Color(0xff636366),),
+            backgroundColor: MaterialStatePropertyAll(Color(0xff1C1C1E)),
           ),
         ),
       ],

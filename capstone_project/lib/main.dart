@@ -45,7 +45,8 @@ class MyApp extends StatelessWidget {
             scenarioId: context.watch<MyScenarioProvider>().getScenarioId()),
         '/movie_scenario': (context) => MoviePracticePage1(
             id: context.watch<MovieScenarioProvider>().getScenarioId(),
-            title: context.watch<MovieScenarioProvider>().getTitle())
+            title: context.watch<MovieScenarioProvider>().getTitle(),
+            url: context.watch<MovieScenarioProvider>().getUrl())
       },
     );
   }
