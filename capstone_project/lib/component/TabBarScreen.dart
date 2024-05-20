@@ -120,26 +120,56 @@ class _ScenarioTabState extends State<ScenarioTab> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        foregroundColor: Colors.white,
-        backgroundColor: Colors.blue,
-        onPressed: () {
-          _showAddScenarioModal(context);
-        },
-        child: const Icon(Icons.add),
-      ),
-      body: isLoading
-          ? Center(child: CircularProgressIndicator())
-          : GridView.builder(
+        backgroundColor: Colors.black,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton: FloatingActionButton(
+          foregroundColor: Colors.white,
+          backgroundColor: Colors.blue,
+          onPressed: () {
+            _showAddScenarioModal(context);
+          },
+          child: const Icon(Icons.add),
+        ),
+        body: isLoading
+            ? Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: (scenarioss.scenarios.length / 2).ceil(),
+                itemBuilder: (context, index) {
+                  final int firstItemIndex = index * 2;
+                  final int secondItemIndex = firstItemIndex + 1;
+
+                  return Center(
+                    child: Wrap(
+                      spacing: 14,
+                      runSpacing: 8,
+                      children: [
+                        ScenarioModel(
+                          id: scenarioss.scenarios[firstItemIndex].id,
+                          title: scenarioss.scenarios[firstItemIndex].title,
+                          sentence:
+                              scenarioss.scenarios[firstItemIndex].sentence,
+                          type: scenarioss.scenarios[firstItemIndex].type,
+                        ),
+                        if (secondItemIndex < scenarioss.scenarios.length)
+                          ScenarioModel(
+                            id: scenarioss.scenarios[secondItemIndex].id,
+                            title: scenarioss.scenarios[secondItemIndex].title,
+                            sentence:
+                                scenarioss.scenarios[secondItemIndex].sentence,
+                            type: scenarioss.scenarios[secondItemIndex].type,
+                          ),
+                      ],
+                    ),
+                  );
+                }) /*
+          GridView.builder(
               itemCount: scenarioss.scenarios.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
               ),
               itemBuilder: (BuildContext context, int index) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 3.0),
+                  padding: const https://dart.dev/diagnostics/extra_positional_arguments_could_be_namedEdgeInsets.symmetric(horizontal: 3.0),
                   child: ScenarioModel(
                     id: scenarioss.scenarios[index].id,
                     title: scenarioss.scenarios[index].title,
@@ -148,8 +178,8 @@ class _ScenarioTabState extends State<ScenarioTab> {
                   ),
                 );
               },
-            ),
-    );
+            ),*/
+        );
   }
 
   void _showAddScenarioModal(BuildContext context) {
