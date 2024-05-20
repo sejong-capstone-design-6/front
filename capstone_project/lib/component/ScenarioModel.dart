@@ -1,14 +1,18 @@
+import 'package:capstone_project/component/EmotionChip.dart';
+import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:flutter/material.dart';
 
-class ScenarioModel extends StatelessWidget {
+class ScenarioModel extends StatefulWidget {
   final int id;
   final String title;
+  final String? sentence;
   final String type;
 
   const ScenarioModel({
     super.key,
     required this.id,
     required this.title,
+    this.sentence,
     required this.type,
   });
 
@@ -16,25 +20,67 @@ class ScenarioModel extends StatelessWidget {
     return ScenarioModel(
       id: json['id'] as int,
       title: json['title'] as String,
+      sentence: json['sentence'] as String?,
       type: json['type'] as String,
     );
   }
 
   @override
+  State<ScenarioModel> createState() => _ScenarioModelState();
+}
+
+class _ScenarioModelState extends State<ScenarioModel> {
+  @override
   Widget build(BuildContext context) {
-    return Card(
-      color: Colors.grey.withOpacity(0.2),
-      child: ListTile(
-        title: Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w300,
-            color: Colors.white,
+    return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => MyScenarioPage(scenarioId: widget.id)));
+        },
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Container(
+            width: 180,
+            height: 220,
+            decoration: BoxDecoration(
+              color: Color(0xff1C1C1E),
+              borderRadius: BorderRadius.circular(40),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                        widget.title,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      if (widget.sentence != null)
+                        Text(
+                          widget.sentence!,
+                          style:
+                              TextStyle(fontSize: 12, color: Color(0xffC4C4C4)),
+                        ),
+                    ],
+                  ),
+                  EmotionChip(widget.type)
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
 

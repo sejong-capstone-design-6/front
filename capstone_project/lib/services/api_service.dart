@@ -74,7 +74,6 @@ class ApiService {
     final response = await http.get(url);
 
     Map<String, dynamic> jsonResponse;
-    List<ScenarioModel> scenarios;
     if (response.statusCode == 200) {
       print(response.body);
       jsonResponse = json.decode(response.body);
