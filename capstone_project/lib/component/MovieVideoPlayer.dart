@@ -21,7 +21,7 @@ class _MovieVideoPlayer extends State<MovieVideoPlayer> {
   void initState() {
     super.initState();
     _controller =  VideoPlayerController.networkUrl(Uri.parse(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
+        widget.url))
       ..initialize();
     _controller.setPlaybackSpeed(1);
     played();

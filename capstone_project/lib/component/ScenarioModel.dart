@@ -1,6 +1,7 @@
 import 'package:capstone_project/component/EmotionChip.dart';
-import 'package:capstone_project/screen/MyScenarioPage.dart';
+import 'package:capstone_project/provider/my_scenario_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class ScenarioModel extends StatefulWidget {
   final int id;
@@ -34,10 +35,8 @@ class _ScenarioModelState extends State<ScenarioModel> {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => MyScenarioPage(scenarioId: widget.id)));
+          context.read<MyScenarioProvider>().setScenarioId(widget.id);
+          Navigator.pushNamed(context, '/my_scenario');
         },
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8.0),
