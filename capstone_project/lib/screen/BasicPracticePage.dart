@@ -64,6 +64,7 @@ class _BasicPracticePage extends State<BasicPracticePage> {
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30))),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
                   padding: const EdgeInsets.only(left: 16, right: 16, top: 16),

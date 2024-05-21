@@ -4,6 +4,7 @@ import 'package:capstone_project/model/bringMovieTranscriptDto.dart';
 import 'package:capstone_project/model/bringScenarioSentenceDto.dart';
 import 'package:capstone_project/network/movie_scenario_service.dart';
 import 'package:capstone_project/screen/MoviePracticePage2.dart';
+import 'package:capstone_project/screen/VideoRevisePage.dart';
 import 'package:flutter/material.dart';
 
 class MovieEvaluationPage extends StatefulWidget {
@@ -221,6 +222,15 @@ class _MovieEvaluationPage extends State<MovieEvaluationPage> {
                                                     proposedEmotion:
                                                         randomEmotion(),
                                                   )));
+                                    } else if (transcriptDto.transcript[index].correctionProposal.id == 3) {
+                                      Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => VideoRevisePage(
+                                          text: widget.sentences[index].text,
+                                          title: widget.title,
+                                          proposedRevision: transcriptDto.transcript[index]
+                                              .correctionProposal.proposal,
+                                          url: "",
+                                          pageRoute: '/movie_scenario')));
                                     }
                                   },
                                   child: Padding(
