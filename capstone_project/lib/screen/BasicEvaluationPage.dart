@@ -4,6 +4,7 @@ import 'package:capstone_project/component/TranscriptPageAppBar.dart';
 import 'package:capstone_project/model/bringTranscriptDto.dart';
 import 'package:capstone_project/network/my_scenario_service.dart';
 import 'package:capstone_project/screen/BasicPracticePage.dart';
+import 'package:capstone_project/screen/VideoRevisePage.dart';
 import 'package:flutter/material.dart';
 
 class BasicEvaluationPage extends StatefulWidget {
@@ -177,7 +178,9 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                                             proposedRevision: transcriptDto
                                                 .correctionProposal.proposal,
                                           )));
-                                } else if(transcriptDto.correctionProposal.id == 1) {
+                                } else if (transcriptDto
+                                        .correctionProposal.id ==
+                                    1) {
                                   Navigator.of(context).push(MaterialPageRoute(
                                       builder: (context) => BasicPracticePage(
                                             id: widget.sentenceId,
@@ -188,6 +191,17 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                                                 .correctionProposal.proposal,
                                             proposedEmotion: randomEmotion(),
                                           )));
+                                } else if (transcriptDto
+                                        .correctionProposal.id ==
+                                    3) {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) => VideoRevisePage(
+                                          text: widget.sentence,
+                                          title: widget.title,
+                                          proposedRevision: transcriptDto
+                                              .correctionProposal.proposal,
+                                          url: "",
+                                          pageRoute: '/my_scenario')));
                                 }
                               },
                               child: Padding(
@@ -212,5 +226,4 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                 )),
           );
   }
-
 }
