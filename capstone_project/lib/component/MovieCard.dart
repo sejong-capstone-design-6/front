@@ -1,5 +1,4 @@
 import 'package:capstone_project/provider/movie_scenario_provider.dart';
-import 'package:capstone_project/screen/MoviePracticePage1.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
@@ -50,14 +49,7 @@ class _MovieCardState extends State<MovieCard> {
             context.read<MovieScenarioProvider>().setTitle(widget.title);
             context.read<MovieScenarioProvider>().SetUrl(widget.url);
             
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MoviePracticePage1(
-                          id: widget.id,
-                          title: widget.title,
-                          url: widget.url
-                        )));
+            Navigator.pushNamed(context, '/movie_scenario');
           },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -6,6 +6,7 @@ import 'package:capstone_project/network/movie_scenario_service.dart';
 import 'package:capstone_project/screen/MoviePracticePage2.dart';
 import 'package:capstone_project/screen/VideoRevisePage.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class MovieEvaluationPage extends StatefulWidget {
   final String title;
@@ -188,9 +189,12 @@ class _MovieEvaluationPage extends State<MovieEvaluationPage> {
                               ? SizedBox()
                               : InkWell(
                                   onTap: () {
+                                    Logger().d(transcriptDto.transcript[index]
+                                            .correctionProposal.id);
                                     if (transcriptDto.transcript[index]
                                             .correctionProposal.id ==
-                                        2 | 4) {
+                                        2 || transcriptDto.transcript[index]
+                                            .correctionProposal.id == 4) {
                                       Navigator.of(context).push(
                                           MaterialPageRoute(
                                               builder: (context) =>

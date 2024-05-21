@@ -14,6 +14,7 @@ class MovieScenarioProvider with ChangeNotifier {
 
   void setTitle(String newTitle) {
     title = newTitle;
+    notifyListeners();
   }
 
   String getTitle() => title;
@@ -21,5 +22,6 @@ class MovieScenarioProvider with ChangeNotifier {
   String getUrl() => url;
   void SetUrl(String newUrl) {
     url = newUrl;
+    notifyListeners();
   }
 }
