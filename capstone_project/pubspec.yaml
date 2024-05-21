@@ -46,6 +46,7 @@ dependencies:
   permission_handler: ^9.2.0
   path_provider: ^2.1.3
   dio: ^5.2.1+1
+  video_thumbnail: ^0.5.3
 
 dev_dependencies:
   flutter_test:
@@ -72,6 +73,9 @@ flutter:
   assets:
     - assets/images/UploadButton.svg
     - assets/images/ThumbUp.svg
+    - assets/images/crying.png
+    - assets/images/angry.png
+    - assets/images/respect.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -31,7 +31,7 @@ class _MovieCardState extends State<MovieCard> {
   void initState() {
     super.initState();
     _controller = VideoPlayerController.networkUrl(Uri.parse(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
+        widget.url))
       ..initialize().then((_) {
         // Ensure the first frame is shown after the video is initialized,
         // even before the play button has been pressed.
@@ -41,6 +41,14 @@ class _MovieCardState extends State<MovieCard> {
 
   @override
   Widget build(BuildContext context) {
+    String thumbnailPath="assets/images/respect.png";
+  if(widget.id == 1) {
+    thumbnailPath="assets/images/respect.png";
+  } else if(widget.id == 2) {
+    thumbnailPath="assets/images/angry.png";
+  } else if(widget.id == 3) {
+    thumbnailPath="assets/images/crying.png";
+  }
     return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: GestureDetector(
@@ -63,7 +71,7 @@ class _MovieCardState extends State<MovieCard> {
                           child: Stack(
                             alignment: Alignment.bottomCenter,
                             children: [
-                              VideoPlayer(_controller),
+                              Image.asset(thumbnailPath),
                             ],
                           ),
                         )
