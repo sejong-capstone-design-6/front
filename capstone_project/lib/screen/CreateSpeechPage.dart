@@ -84,7 +84,7 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
               {
                 statusCode = await myScenarioService.updateSceanrio(CreateScenarioDto(_scenarioID, text, _emotion));
                 if(statusCode==201){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _scenarioID, mode: "스피치",)));
                 }
                 else{
                   showSnackDeny(context);
@@ -93,7 +93,7 @@ class _MyCheckBoxState extends State<CreateSpeechPage>{
               else{
                 dynamic response = await reviseSentenceService.ReviseSentence(ReviseSentenceDto(_scenarioID,text,_emotion));
                 if(response.statusCode==200){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _userId)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> MyScenarioPage(scenarioId: _userId, mode: "스피치",)));
                 }
                 else{
                   showSnackDeny(context);

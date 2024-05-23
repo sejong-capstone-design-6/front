@@ -35,7 +35,7 @@ class _ScenarioModelState extends State<ScenarioModel> {
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          context.read<MyScenarioProvider>().setScenarioId(widget.id);
+          context.read<MyScenarioProvider>().setScenarioId(widget.id,widget.type);
           Navigator.pushNamed(context, '/my_scenario');
         },
         child: Padding(

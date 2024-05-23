@@ -110,7 +110,7 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  MyScenarioPage(scenarioId: _userId)));
+                                  MyScenarioPage(scenarioId: _userId,mode: "연기",)));
                     } else {
                       showSnackDeny(context);
                     }
@@ -123,7 +123,7 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  MyScenarioPage(scenarioId: _userId)));
+                                  MyScenarioPage(scenarioId: _userId,mode: "연기",)));
                     } else {    
                       showSnackDeny(context);
                     }
@@ -235,20 +235,6 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
               ),
             ),
           ),
-          Positioned(
-              right: 16.0,
-              bottom: 50.0,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 0, 125, 167),
-                    shape: CircleBorder(),
-                    padding: EdgeInsets.all(10.0)),
-                onPressed: () {},
-                child: Text(
-                  "AI",
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
-                ),
-              ))
         ],
       ),
     );

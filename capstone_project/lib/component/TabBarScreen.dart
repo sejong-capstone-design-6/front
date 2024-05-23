@@ -256,7 +256,7 @@ class _ScenarioTabState extends State<ScenarioTab> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                MyScenarioPage(scenarioId: scenarioId)));
+                                MyScenarioPage(scenarioId: scenarioId, mode: mode,)));
                   },
                   child: const Text('확인'),
                 ),

@@ -91,7 +91,7 @@ Widget EmotionIcon(String value) {
       color: Color(0xffBEBEBE),
       size: 16,
     );
-  } else if (value == "분노") {
+  } else if (value == "분노"||value == "강조") {
     return Icon(
       Icons.circle,
       color: Color.fromARGB(255, 172, 0, 0),
