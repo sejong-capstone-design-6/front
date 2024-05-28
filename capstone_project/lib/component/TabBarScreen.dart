@@ -5,6 +5,7 @@ import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:capstone_project/services/api_service.dart';
 import 'package:capstone_project/component/MovieCard.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class TabBarScreen extends StatefulWidget {
   const TabBarScreen({Key? key}) : super(key: key);
@@ -30,119 +31,18 @@ class _TabBarScreenState extends State<TabBarScreen>
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: Scaffold(
-      backgroundColor: Colors.black,
-      body: Column(
-        children: [
-          _tabBar(),
-          Expanded(
-            child: TabBarView(
-              controller: tabController,
-              children: [ScenarioTab(), MovieTab()],
-            ),
-          ),
-        ],
-      ),
-    ));
-  }
-
-  Widget _tabBar() {
-    return Column(
-      children: [
-        TabBar(
-          controller: tabController,
-          labelColor: Colors.white,
-          labelStyle: const TextStyle(
-            fontSize: 18,
-          ),
-          unselectedLabelColor: Colors.grey,
-          unselectedLabelStyle: const TextStyle(
-            fontSize: 18,
-          ),
-          indicatorColor: Colors.white,
-          indicatorSize: TabBarIndicatorSize.tab,
-          tabs: const [
-            Tab(text: "My"),
-            Tab(text: "Movie"),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 14),
-          child: SearchBar(
-            hintText: 'Search',
-            constraints: BoxConstraints(minHeight: 36),
-            leading: Icon(Icons.search, color: Color(0xff636366),),
-            backgroundColor: MaterialStatePropertyAll(Color(0xff1C1C1E)),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class MovieTab extends StatefulWidget {
-  const MovieTab({super.key});
-
-  @override
-  _MovieTab createState() => _MovieTab();
-}
-
-class _MovieTab extends State<MovieTab> {
   late BringMovieDto movies;
+  late ScenarioList scenarioss;
+
+  late BringMovieDto movieToUse;
+  late ScenarioList scenarioListToUse;
+
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
     fetchMovies();
-  }
-
-  Future<void> fetchMovies() async {
-    BringMovieDto dto = await movieScenarioService.bringScenario();
-
-    setState(() {
-      movies = dto;
-      isLoading = false;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        body: isLoading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : ListView.builder(
-                itemCount: movies.scenarios.length,
-                itemBuilder: (context, index) {
-                  return MovieCard(
-                    id: movies.scenarios[index].id,
-                    title: movies.scenarios[index].title,
-                    movie: movies.scenarios[index].movie,
-                    url: movies.scenarios[index].thumbnailUrl,
-                  );
-                }));
-  }
-}
-
-class ScenarioTab extends StatefulWidget {
-  const ScenarioTab({super.key});
-
-  @override
-  _ScenarioTabState createState() => _ScenarioTabState();
-}
-
-class _ScenarioTabState extends State<ScenarioTab> {
-  late ScenarioList scenarioss;
-  bool isLoading = true;
-
-  @override
-  void initState() {
-    super.initState();
     fetchScenarios();
   }
 
@@ -151,12 +51,167 @@ class _ScenarioTabState extends State<ScenarioTab> {
 
     setState(() {
       scenarioss = fetchedScenarios;
+      scenarioListToUse = scenarioss.deepCopy();
+      isLoading = false;
+    });
+  }
+
+  Future<void> fetchMovies() async {
+    BringMovieDto dto = await movieScenarioService.bringScenario();
+
+    setState(() {
+      movies = dto;
+      movieToUse = dto.deepCopy();
       isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    return isLoading
+        ? Center(
+            child: CircularProgressIndicator(),
+          )
+        : Expanded(
+            child: Scaffold(
+            backgroundColor: Colors.black,
+            body: Column(
+              children: [
+                Column(
+                  children: [
+                    TabBar(
+                      controller: tabController,
+                      labelColor: Colors.white,
+                      labelStyle: const TextStyle(
+                        fontSize: 18,
+                      ),
+                      unselectedLabelColor: Colors.grey,
+                      unselectedLabelStyle: const TextStyle(
+                        fontSize: 18,
+                      ),
+                      indicatorColor: Colors.white,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      tabs: const [
+                        Tab(text: "My"),
+                        Tab(text: "Movie"),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 14),
+                      child: SearchBar(
+                        hintText: 'Search',
+                        constraints: BoxConstraints(minHeight: 36),
+                        leading: Icon(
+                          Icons.search,
+                          color: Color(0xff636366),
+                        ),
+                        backgroundColor:
+                            MaterialStatePropertyAll(Color(0xff1C1C1E)),
+                        onChanged: (value) {
+                          Logger().d(value);
+                          setState(() {
+                            if (value != "") {
+                              // 조건에 맞는 새로운 리스트를 생성
+                              List<ScenarioModel> filteredScenarios = scenarioss
+                                  .scenarios
+                                  .where((element) =>
+                                      element.title.contains(value))
+                                  .toList();
+
+                              // scenarioListToUse의 scenarios를 filteredScenarios로 설정
+                              scenarioListToUse.scenarios =
+                                  List.from(filteredScenarios);
+
+                              List<Scenario> filterdMovieSentence = movies
+                                  .scenarios
+                                  .where((element) =>
+                                      element.title.contains((value)))
+                                  .toList();
+
+                              movieToUse.scenarios =
+                                  List.from(filterdMovieSentence);
+
+                                  Logger().d(movieToUse);
+                                  Logger().d(movies);
+                            } else {
+                              movieToUse = movies.deepCopy();
+                              scenarioListToUse = scenarioss.deepCopy();
+                            }
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                Expanded(
+                  child: TabBarView(
+                    controller: tabController,
+                    children: [
+                      ScenarioTab(
+                        scenarioss: scenarioListToUse,
+                      ),
+                      MovieTab(
+                        movies: movieToUse!,
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ));
+  }
+}
+
+class MovieTab extends StatefulWidget {
+  final BringMovieDto movies;
+  MovieTab({super.key, required this.movies});
+
+  @override
+  _MovieTab createState() => _MovieTab();
+}
+
+class _MovieTab extends State<MovieTab> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: ListView.builder(
+            itemCount: widget.movies.scenarios.length,
+            itemBuilder: (context, index) {
+              return MovieCard(
+                id: widget.movies.scenarios[index].id,
+                title: widget.movies.scenarios[index].title,
+                movie: widget.movies.scenarios[index].movie,
+                url: widget.movies.scenarios[index].thumbnailUrl,
+              );
+            }));
+  }
+}
+
+class ScenarioTab extends StatefulWidget {
+  final ScenarioList scenarioss;
+
+  ScenarioTab({super.key, required this.scenarioss});
+
+  @override
+  _ScenarioTabState createState() => _ScenarioTabState();
+}
+
+class _ScenarioTabState extends State<ScenarioTab> {
+  late ScenarioList scenarioss;
+
+  Future<void> fetchScenarios() async {
+    ScenarioList fetchedScenarios = await ApiService().getMyScenarios();
+
+    setState(() {
+      scenarioss = fetchedScenarios;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    scenarioss = widget.scenarioss;
+
     return Scaffold(
         backgroundColor: Colors.black,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -168,38 +223,37 @@ class _ScenarioTabState extends State<ScenarioTab> {
           },
           child: const Icon(Icons.add),
         ),
-        body: isLoading
-            ? Center(child: CircularProgressIndicator())
-            : ListView.builder(
-                itemCount: (scenarioss.scenarios.length / 2).ceil(),
-                itemBuilder: (context, index) {
-                  final int firstItemIndex = index * 2;
-                  final int secondItemIndex = firstItemIndex + 1;
+        body: ListView.builder(
+            itemCount: (widget.scenarioss.scenarios.length / 2).ceil(),
+            itemBuilder: (context, index) {
+              final int firstItemIndex = index * 2;
+              final int secondItemIndex = firstItemIndex + 1;
 
-                  return Center(
-                    child: Wrap(
-                      spacing: 14,
-                      runSpacing: 8,
-                      children: [
-                        ScenarioModel(
-                          id: scenarioss.scenarios[firstItemIndex].id,
-                          title: scenarioss.scenarios[firstItemIndex].title,
-                          sentence:
-                              scenarioss.scenarios[firstItemIndex].sentence,
-                          type: scenarioss.scenarios[firstItemIndex].type,
-                        ),
-                        if (secondItemIndex < scenarioss.scenarios.length)
-                          ScenarioModel(
-                            id: scenarioss.scenarios[secondItemIndex].id,
-                            title: scenarioss.scenarios[secondItemIndex].title,
-                            sentence:
-                                scenarioss.scenarios[secondItemIndex].sentence,
-                            type: scenarioss.scenarios[secondItemIndex].type,
-                          ),
-                      ],
+              return Center(
+                child: Wrap(
+                  spacing: 14,
+                  runSpacing: 8,
+                  children: [
+                    ScenarioModel(
+                      id: widget.scenarioss.scenarios[firstItemIndex].id,
+                      title: widget.scenarioss.scenarios[firstItemIndex].title,
+                      sentence:
+                          widget.scenarioss.scenarios[firstItemIndex].sentence,
+                      type: widget.scenarioss.scenarios[firstItemIndex].type,
                     ),
-                  );
-                }));
+                    if (secondItemIndex < widget.scenarioss.scenarios.length)
+                      ScenarioModel(
+                        id: widget.scenarioss.scenarios[secondItemIndex].id,
+                        title:
+                            widget.scenarioss.scenarios[secondItemIndex].title,
+                        sentence: widget
+                            .scenarioss.scenarios[secondItemIndex].sentence,
+                        type: widget.scenarioss.scenarios[secondItemIndex].type,
+                      ),
+                  ],
+                ),
+              );
+            }));
   }
 
   void _showAddScenarioModal(BuildContext context) {

@@ -7,6 +7,13 @@ class BringMovieDto {
       : scenarios = (json['movies'] as List)
             .map((e) => Scenario.fromJson(e))
             .toList();
+
+  // 깊은 복사 메서드
+  BringMovieDto deepCopy() {
+    return BringMovieDto(
+      scenarios: scenarios.map((scenario) => scenario.copy()).toList(),
+    );
+  }
 }
 
 class Scenario {
@@ -22,4 +29,9 @@ class Scenario {
         title = json['title'],
         movie = json['movie'],
         thumbnailUrl = json['thumbnail_url'];
+
+  // 깊은 복사 메서드
+  Scenario copy() {
+    return Scenario(id, title, movie, thumbnailUrl);
+  }
 }
