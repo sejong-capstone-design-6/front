@@ -1,4 +1,4 @@
-import 'package:capstone_project/component/EmotionChip.dart';
+import 'package:capstone_project/component/SpeechTypeChip.dart';
 import 'package:capstone_project/provider/my_scenario_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -76,7 +76,7 @@ class _ScenarioModelState extends State<ScenarioModel> {
                         ),
                     ],
                   ),
-                  EmotionChip(widget.type)
+                  SpeechTypeChip(type: widget.type,)
                 ],
               ),
             ),
