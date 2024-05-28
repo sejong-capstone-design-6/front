@@ -152,7 +152,7 @@ class _TabBarScreenState extends State<TabBarScreen>
                         scenarioss: scenarioListToUse,
                       ),
                       MovieTab(
-                        movies: movieToUse!,
+                        movies: movieToUse,
                       )
                     ],
                   ),
