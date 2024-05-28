@@ -1,6 +1,5 @@
 import 'package:capstone_project/screen/CreateSpeechPage.dart';
 import 'package:capstone_project/screen/CreateScenarioPage.dart';
-import 'package:capstone_project/component/BasicAppBar.dart';
 import 'package:capstone_project/component/EmotionCard.dart';
 import 'package:capstone_project/model/bringScenarioDto.dart';
 import 'package:capstone_project/network/my_scenario_service.dart';
@@ -39,7 +38,22 @@ class _SpeechState extends State<MyScenarioPage> {
         : Scaffold(
             appBar: PreferredSize(
                 preferredSize: Size.fromHeight(48.0),
-                child: BasicAppBar(scenarioCard.title)),
+                child: AppBar(
+                  leading: IconButton(
+                    onPressed: () {
+                      Navigator.popUntil(context, (route) => route.isFirst);
+                    },
+                    color: Colors.white,
+                    icon: Icon(Icons.keyboard_arrow_left),
+                    iconSize: 24,
+                  ),
+                  title: Text(
+                    scenarioCard.title,
+                    style: TextStyle(fontSize: 16, color: Colors.white),
+                  ),
+                  centerTitle: true,
+                  titleSpacing: 6.5,
+                )),
             body: ListView.builder(
                 itemCount: scenarioCard.sentences.length,
                 itemBuilder: (BuildContext context, int index) {

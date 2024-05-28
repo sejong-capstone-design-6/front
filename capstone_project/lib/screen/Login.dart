@@ -122,12 +122,11 @@ class _LoginPageState extends State<LoginPage> {
                       if (Emailinput.text.isEmpty == false &&
                           Passwordinput.text.isEmpty == false &&
                           statusCode == 201) {
-                        Navigator.push(
+                        Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    //MyScenarioPage(scenarioId: 1)));
-                                    MainPage()));
+                                builder: (context) => MainPage()),
+                            (route) => false);
                       } else if (Emailinput.text.isEmpty == true) {
                         showSnackEmailinput(context);
                       } else if (Passwordinput.text.isEmpty == true) {

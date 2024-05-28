@@ -1,4 +1,3 @@
-import 'package:capstone_project/component/BasicAppBar.dart';
 import 'package:capstone_project/component/MovieVideoPlayer.dart';
 import 'package:capstone_project/model/bringScenarioSentenceDto.dart';
 import 'package:capstone_project/network/movie_scenario_service.dart';
@@ -40,7 +39,22 @@ class _MoviePracticePage1 extends State<MoviePracticePage1> {
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(48.0),
-        child: BasicAppBar(widget.title),
+        child: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.popUntil(context, (route) => route.isFirst);
+            },
+            color: Colors.white,
+            icon: Icon(Icons.keyboard_arrow_left),
+            iconSize: 24,
+          ),
+          title: Text(
+            widget.title,
+            style: TextStyle(fontSize: 16, color: Colors.white),
+          ),
+          centerTitle: true,
+          titleSpacing: 6.5,
+        ),
       ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
