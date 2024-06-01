@@ -109,6 +109,12 @@ Widget EmotionIcon(String value) {
       color: Color(0xff8E9A30),
       size: 16,
     );
+  } else if (value == "강조") {
+    return Icon(
+      Icons.circle,
+      color: Color.fromARGB(255, 172, 0, 0),
+      size: 16,
+    );
   } else {
     return Text("");
   }

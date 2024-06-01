@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
       home: SplashScreen(),
       routes: {
         '/my_scenario': (context) => MyScenarioPage(
-            scenarioId: context.watch<MyScenarioProvider>().getScenarioId()),
+            scenarioId: context.watch<MyScenarioProvider>().getScenarioId(), mode: context.watch<MyScenarioProvider>().getMode(),),
         '/movie_scenario': (context) => MoviePracticePage1(
             id: context.watch<MovieScenarioProvider>().getScenarioId(),
             title: context.watch<MovieScenarioProvider>().getTitle(),
