@@ -59,10 +59,10 @@ class _EmotionCardState extends State<EmotionCard> {
             child: InkWell(
               onTap: (){
                 if(mode=="연기"){
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateScenarioPage(userId: _userId, scenarioId: _scenarioID, text: widget.scenario, emotion: widget.emotion, isRevise: true,)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateScenarioPage(title: widget.title, userId: _userId, scenarioId: _scenarioID, text: widget.scenario, emotion: widget.emotion, isRevise: true,)));
                 }
                 else{
-                  Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateSpeechPage(userId: _userId, scenarioId: _scenarioID, text: widget.scenario, emotion: widget.emotion, isRevise: true,)));
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateSpeechPage(title: widget.title, userId: _userId, scenarioId: _scenarioID, text: widget.scenario, emotion: widget.emotion, isRevise: true,)));
                 }
               },
               child: Stack(

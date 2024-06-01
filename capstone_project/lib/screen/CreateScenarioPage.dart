@@ -3,8 +3,10 @@ import 'package:capstone_project/model/createScenarioDto.dart';
 import 'package:capstone_project/model/reviseSentenceDto.dart';
 import 'package:capstone_project/network/my_scenario_service.dart';
 import 'package:capstone_project/network/revise_sentence_service.dart';
+import 'package:capstone_project/provider/my_scenario_provider.dart';
 import 'package:capstone_project/screen/MyScenarioPage.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class CreateScenarioPage extends StatefulWidget {
   final int userId;
@@ -12,9 +14,11 @@ class CreateScenarioPage extends StatefulWidget {
   final String text;
   final String emotion;
   final bool isRevise;
+  final String title;
 
   CreateScenarioPage(
       {super.key,
+      required this.title,
       required this.userId,
       required this.scenarioId,
       required this.text,
@@ -58,13 +62,13 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
 
   @override
   Widget build(BuildContext context) {
-    int _userId=widget.userId;
     int _scenarioID = widget.scenarioId;
     String _emotion = widget.emotion;
     double weth = MediaQuery.of(context).size.width;
     double hight = MediaQuery.of(context).size.height;
+    context.read<MyScenarioProvider>().setScenarioId(_scenarioID);
+    context.read<MyScenarioProvider>().setMode('연기');
     
-
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(48.0),
@@ -78,7 +82,7 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
             iconSize: 24,
           ),
           title: Text(
-            "Capstone Speech",
+            widget.title,
             style: TextStyle(fontSize: 16, color: Colors.white),
           ),
           centerTitle: true,
@@ -110,7 +114,7 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  MyScenarioPage(scenarioId: _userId)));
+                                  MyScenarioPage(scenarioId: _scenarioID, mode: "연기",)));
                     } else {
                       showSnackDeny(context);
                     }
@@ -123,7 +127,7 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  MyScenarioPage(scenarioId: _userId)));
+                                  MyScenarioPage(scenarioId: _scenarioID, mode: "연기")));
                     } else {    
                       showSnackDeny(context);
                     }
@@ -235,20 +239,7 @@ class _MyCheckBoxState extends State<CreateScenarioPage> {
               ),
             ),
           ),
-          Positioned(
-              right: 16.0,
-              bottom: 50.0,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 0, 125, 167),
-                    shape: CircleBorder(),
-                    padding: EdgeInsets.all(10.0)),
-                onPressed: () {},
-                child: Text(
-                  "AI",
-                  style: TextStyle(color: Colors.white, fontSize: 18.0),
-                ),
-              ))
+          
         ],
       ),
     );

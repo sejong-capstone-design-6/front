@@ -1,4 +1,4 @@
-import 'package:capstone_project/component/EmotionChip.dart';
+import 'package:capstone_project/component/SpeechTypeChip.dart';
 import 'package:capstone_project/provider/my_scenario_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +36,7 @@ class _ScenarioModelState extends State<ScenarioModel> {
     return InkWell(
         onTap: () {
           context.read<MyScenarioProvider>().setScenarioId(widget.id);
+          context.read<MyScenarioProvider>().setMode(widget.type);
           Navigator.pushNamed(context, '/my_scenario');
         },
         child: Padding(
@@ -76,7 +77,7 @@ class _ScenarioModelState extends State<ScenarioModel> {
                         ),
                     ],
                   ),
-                  EmotionChip(widget.type)
+                  SpeechTypeChip(type: widget.type,)
                 ],
               ),
             ),
@@ -86,7 +87,7 @@ class _ScenarioModelState extends State<ScenarioModel> {
 }
 
 class ScenarioList {
-  final List<ScenarioModel> scenarios;
+  List<ScenarioModel> scenarios;
 
   ScenarioList({required this.scenarios});
 
@@ -95,5 +96,18 @@ class ScenarioList {
     List<ScenarioModel> scenariosList =
         list.map((i) => ScenarioModel.fromJson(i)).toList();
     return ScenarioList(scenarios: scenariosList);
+  }
+
+   ScenarioList deepCopy() {
+    return ScenarioList(
+      scenarios: List<ScenarioModel>.from(
+        scenarios.map((scenario) => ScenarioModel(
+              id: scenario.id,
+              title: scenario.title,
+              sentence: scenario.sentence,
+              type: scenario.type,
+            )),
+      ),
+    );
   }
 }

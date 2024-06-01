@@ -36,7 +36,7 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
       });
     });
   }
-
+  
   @override
   Widget build(BuildContext context) {
     return isLoading
@@ -200,7 +200,7 @@ class _BasicEvaluationPage extends State<BasicEvaluationPage> {
                                           title: widget.title,
                                           proposedRevision: transcriptDto
                                               .correctionProposal.proposal,
-                                          url: "",
+                                          url: "https://sound-of-mind.s3.ap-northeast-2.amazonaws.com/%E1%84%87%E1%85%A1%E1%86%AF%E1%84%89%E1%85%A5%E1%86%BC+%E1%84%80%E1%85%AD%E1%84%8C%E1%85%A5%E1%86%BC.mp4",
                                           pageRoute: '/my_scenario')));
                                 }
                               },

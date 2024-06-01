@@ -5,6 +5,7 @@ import 'package:capstone_project/model/bringTranscriptDto.dart';
 import 'package:capstone_project/model/bringTranscriptIdDto.dart';
 import 'package:capstone_project/model/checkEvaluationProgressDto.dart';
 import 'package:capstone_project/model/createScenarioDto.dart';
+import 'package:capstone_project/model/reviseScenarioDto.dart';
 
 import 'package:capstone_project/network/const.dart';
 import 'package:dio/dio.dart';
@@ -106,6 +107,25 @@ class MyScenarioService {
     } catch (e) {
       Logger().e(e);
       throw Exception();
+    }
+  }
+
+  Future<ReviseScenarioDto> reviseSentence(ReviseScenarioDto dto) async {
+    try {
+      final url = Uri.parse("$myScenarioUrl/sentences/revise");
+
+      final response = await http.post(url,
+          body: jsonEncode(dto.toJson()),
+          headers: {"Content-Type": "application/json"});
+      if (response.statusCode == 201) {
+        final jsonData = json.decode(response.body);
+        return ReviseScenarioDto.fromJson(jsonData);
+      } else {
+        throw Exception(response.statusCode);
+      }
+    } catch (e) {
+      Logger().d(e);
+      throw Exception(e);
     }
   }
 }

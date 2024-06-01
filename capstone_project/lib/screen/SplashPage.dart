@@ -15,13 +15,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Timer(
-      const Duration(seconds: 2),
-      () => Navigator.push(
-          //context, MaterialPageRoute(builder: (context) => MainPage())),
-          context,
-          MaterialPageRoute(builder: (context) => LoginPage())),
-    ) //CreateScenarioPage(scenarioId: 4, scenarioID_ID: 3, text: "s", emotion: "평범")
-        ;
+        const Duration(seconds: 2),
+        () => Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => LoginPage()),
+            (route) => false));
   }
 
   @override
